@@ -1,719 +1,243 @@
-import "dotenv/config"
-import { randomBytes, randomUUID } from "crypto"
-import { MemberRole } from "@prisma/client"
-import { prisma } from "../lib/db/prisma"
-import { hashPassword } from "../lib/auth/password"
-import { encrypt } from "../lib/security/encryption"
+import "dotenv/config";
+import { PrismaClient, MemberRole } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { hash } from "bcryptjs";
+import { randomBytes } from "crypto";
 
-const DEFAULT_PASSWORD = "Password123!"
-
-function daysFromNow(days: number) {
-  return new Date(Date.now() + days * 24 * 60 * 60 * 1000)
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+    throw new Error("DATABASE_URL environment variable is not set");
 }
-
-function daysAgo(days: number) {
-  return new Date(Date.now() - days * 24 * 60 * 60 * 1000)
-}
-
-function buildConfigEntry(input: {
-  id?: string
-  environmentId: string
-  key: string
-  value: string
-  isSecret: boolean
-  description?: string
-  isRequired?: boolean
-  createdBy: string
-  updatedBy?: string
-  rotatedDaysAgo?: number
-}) {
-  return {
-    id: input.id ?? randomUUID(),
-    environmentId: input.environmentId,
-    key: input.key,
-    valueEncrypted: input.isSecret ? encrypt(input.value) : null,
-    valuePlain: input.isSecret ? null : input.value,
-    isSecret: input.isSecret,
-    description: input.description ?? null,
-    isRequired: input.isRequired ?? false,
-    lastRotatedAt:
-      input.isSecret && input.rotatedDaysAgo
-        ? daysAgo(input.rotatedDaysAgo)
-        : null,
-    createdBy: input.createdBy,
-    updatedBy: input.updatedBy ?? input.createdBy,
-  }
-}
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const ids = {
-    users: {
-      alice: randomUUID(),
-      bob: randomUUID(),
-      clara: randomUUID(),
-      diego: randomUUID(),
-      eve: randomUUID(),
-    },
-    projects: {
-      acme: randomUUID(),
-      mobile: randomUUID(),
-      marketing: randomUUID(),
-    },
-    environments: {
-      acmeDev: randomUUID(),
-      acmeStaging: randomUUID(),
-      acmeProd: randomUUID(),
-      mobileDev: randomUUID(),
-      mobileStaging: randomUUID(),
-      mobileProd: randomUUID(),
-      marketingDev: randomUUID(),
-      marketingStaging: randomUUID(),
-      marketingProd: randomUUID(),
-    },
-    sharedEntries: {
-      acmeProdStripe: randomUUID(),
-      mobileStagingJwt: randomUUID(),
-      marketingProdCms: randomUUID(),
-    },
-  }
+    console.log("🌱 Starting seed...");
 
-  const users = [
-    {
-      id: ids.users.alice,
-      fullName: "Alice Johnson",
-      email: "alice@example.com",
-      password: DEFAULT_PASSWORD,
-    },
-    {
-      id: ids.users.bob,
-      fullName: "Bob Lee",
-      email: "bob@example.com",
-      password: DEFAULT_PASSWORD,
-    },
-    {
-      id: ids.users.clara,
-      fullName: "Clara Smith",
-      email: "clara@example.com",
-      password: DEFAULT_PASSWORD,
-    },
-    {
-      id: ids.users.diego,
-      fullName: "Diego Rivera",
-      email: "diego@example.com",
-      password: DEFAULT_PASSWORD,
-    },
-    {
-      id: ids.users.eve,
-      fullName: "Eve Patel",
-      email: "eve@example.com",
-      password: DEFAULT_PASSWORD,
-    },
-  ]
+    // ─── Users ────────────────────────────────────────────────────────────────
 
-  const userAuthRows = await Promise.all(
-    users.map(async (user) => ({
-      id: user.id,
-      email: user.email,
-      passwordHash: await hashPassword(user.password),
-    })),
-  )
+    const usersData = [
+        { fullName: "Alice Owens", email: "alice@example.com", password: "password123" },
+        { fullName: "Bob Marchetti", email: "bob@example.com", password: "password123" },
+        { fullName: "Carol Chen", email: "carol@example.com", password: "password123" },
+        { fullName: "David Kim", email: "david@example.com", password: "password123" },
+        { fullName: "Eva Rossi", email: "eva@example.com", password: "password123" },
+    ];
 
-  const profileRows = users.map((user) => ({
-    id: user.id,
-    fullName: user.fullName,
-    email: user.email,
-  }))
+    const createdProfiles: Record<string, Awaited<ReturnType<typeof prisma.profile.create>>> = {};
 
-  const projectRows = [
-    {
-      id: ids.projects.acme,
-      name: "Acme SaaS Platform",
-      description: "Core SaaS app used by the product and customer success teams.",
-      ownerId: ids.users.alice,
-    },
-    {
-      id: ids.projects.mobile,
-      name: "Mobile Commerce API",
-      description: "Backend services powering the iOS and Android shopping apps.",
-      ownerId: ids.users.diego,
-    },
-    {
-      id: ids.projects.marketing,
-      name: "Marketing Site",
-      description: "Public website, CMS integrations, and campaign landing pages.",
-      ownerId: ids.users.eve,
-    },
-  ]
+    for (const u of usersData) {
+        const passwordHash = await hash(u.password, 12);
 
-  const memberRows = [
-    {
-      projectId: ids.projects.acme,
-      userId: ids.users.alice,
-      role: MemberRole.OWNER,
-      canRevealSecrets: true,
-      canShareSecrets: true,
-    },
-    {
-      projectId: ids.projects.acme,
-      userId: ids.users.bob,
-      role: MemberRole.EDITOR,
-      canRevealSecrets: true,
-      canShareSecrets: true,
-    },
-    {
-      projectId: ids.projects.acme,
-      userId: ids.users.clara,
-      role: MemberRole.VIEWER,
-      canRevealSecrets: false,
-      canShareSecrets: false,
-    },
-    {
-      projectId: ids.projects.acme,
-      userId: ids.users.diego,
-      role: MemberRole.EDITOR,
-      canRevealSecrets: true,
-      canShareSecrets: false,
-    },
-    {
-      projectId: ids.projects.mobile,
-      userId: ids.users.diego,
-      role: MemberRole.OWNER,
-      canRevealSecrets: true,
-      canShareSecrets: true,
-    },
-    {
-      projectId: ids.projects.mobile,
-      userId: ids.users.alice,
-      role: MemberRole.EDITOR,
-      canRevealSecrets: true,
-      canShareSecrets: true,
-    },
-    {
-      projectId: ids.projects.mobile,
-      userId: ids.users.eve,
-      role: MemberRole.EDITOR,
-      canRevealSecrets: true,
-      canShareSecrets: true,
-    },
-    {
-      projectId: ids.projects.mobile,
-      userId: ids.users.clara,
-      role: MemberRole.VIEWER,
-      canRevealSecrets: false,
-      canShareSecrets: false,
-    },
-    {
-      projectId: ids.projects.marketing,
-      userId: ids.users.eve,
-      role: MemberRole.OWNER,
-      canRevealSecrets: true,
-      canShareSecrets: true,
-    },
-    {
-      projectId: ids.projects.marketing,
-      userId: ids.users.bob,
-      role: MemberRole.EDITOR,
-      canRevealSecrets: false,
-      canShareSecrets: true,
-    },
-    {
-      projectId: ids.projects.marketing,
-      userId: ids.users.clara,
-      role: MemberRole.VIEWER,
-      canRevealSecrets: false,
-      canShareSecrets: false,
-    },
-  ].map((member) => ({
-    id: randomUUID(),
-    ...member,
-  }))
+        const userAuth = await prisma.userAuth.create({
+            data: {
+                email: u.email,
+                passwordHash,
+                profile: {
+                    create: {
+                        fullName: u.fullName,
+                        email: u.email,
+                    },
+                },
+            },
+            include: { profile: true },
+        });
 
-  const environmentRows = [
-    {
-      id: ids.environments.acmeDev,
-      projectId: ids.projects.acme,
-      name: "Development",
-      slug: "development",
-    },
-    {
-      id: ids.environments.acmeStaging,
-      projectId: ids.projects.acme,
-      name: "Staging",
-      slug: "staging",
-    },
-    {
-      id: ids.environments.acmeProd,
-      projectId: ids.projects.acme,
-      name: "Production",
-      slug: "production",
-    },
-    {
-      id: ids.environments.mobileDev,
-      projectId: ids.projects.mobile,
-      name: "Development",
-      slug: "development",
-    },
-    {
-      id: ids.environments.mobileStaging,
-      projectId: ids.projects.mobile,
-      name: "Staging",
-      slug: "staging",
-    },
-    {
-      id: ids.environments.mobileProd,
-      projectId: ids.projects.mobile,
-      name: "Production",
-      slug: "production",
-    },
-    {
-      id: ids.environments.marketingDev,
-      projectId: ids.projects.marketing,
-      name: "Development",
-      slug: "development",
-    },
-    {
-      id: ids.environments.marketingStaging,
-      projectId: ids.projects.marketing,
-      name: "Staging",
-      slug: "staging",
-    },
-    {
-      id: ids.environments.marketingProd,
-      projectId: ids.projects.marketing,
-      name: "Production",
-      slug: "production",
-    },
-  ]
+        createdProfiles[u.email] = userAuth.profile!;
+        console.log(`  ✅ Created user: ${u.fullName} <${u.email}>`);
+    }
 
-  const configEntryRows = [
-    buildConfigEntry({
-      environmentId: ids.environments.acmeDev,
-      key: "DATABASE_URL",
-      value: "postgresql://acme-dev:secret@localhost:5432/acme_dev",
-      isSecret: true,
-      description: "Local development database",
-      isRequired: true,
-      createdBy: ids.users.alice,
-      updatedBy: ids.users.bob,
-      rotatedDaysAgo: 10,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.acmeDev,
-      key: "NEXT_PUBLIC_APP_URL",
-      value: "http://localhost:3000",
-      isSecret: false,
-      description: "Frontend URL for local development",
-      isRequired: true,
-      createdBy: ids.users.alice,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.acmeDev,
-      key: "REDIS_URL",
-      value: "redis://localhost:6379",
-      isSecret: false,
-      description: "Redis endpoint for queues and caching",
-      createdBy: ids.users.bob,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.acmeStaging,
-      key: "DATABASE_URL",
-      value: "postgresql://acme-staging:secret@db.internal:5432/acme_staging",
-      isSecret: true,
-      description: "Staging database connection",
-      isRequired: true,
-      createdBy: ids.users.alice,
-      updatedBy: ids.users.bob,
-      rotatedDaysAgo: 7,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.acmeStaging,
-      key: "NEXT_PUBLIC_APP_URL",
-      value: "https://staging.acme.example.com",
-      isSecret: false,
-      description: "Staging frontend URL",
-      isRequired: true,
-      createdBy: ids.users.bob,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.acmeStaging,
-      key: "STRIPE_WEBHOOK_SECRET",
-      value: "whsec_staging_acme_12345",
-      isSecret: true,
-      description: "Stripe webhook signing secret",
-      createdBy: ids.users.bob,
-      rotatedDaysAgo: 3,
-    }),
-    buildConfigEntry({
-      id: ids.sharedEntries.acmeProdStripe,
-      environmentId: ids.environments.acmeProd,
-      key: "STRIPE_SECRET_KEY",
-      value: "sk_live_acme_prod_1234567890",
-      isSecret: true,
-      description: "Stripe secret used by checkout and billing jobs",
-      isRequired: true,
-      createdBy: ids.users.alice,
-      updatedBy: ids.users.alice,
-      rotatedDaysAgo: 1,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.acmeProd,
-      key: "NEXT_PUBLIC_APP_URL",
-      value: "https://app.acme.example.com",
-      isSecret: false,
-      description: "Primary production URL",
-      isRequired: true,
-      createdBy: ids.users.alice,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.acmeProd,
-      key: "SENTRY_DSN",
-      value: "https://public@sentry.example.com/42",
-      isSecret: false,
-      description: "Frontend error reporting DSN",
-      createdBy: ids.users.bob,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.mobileDev,
-      key: "API_BASE_URL",
-      value: "http://localhost:4000",
-      isSecret: false,
-      description: "Local API origin for mobile developers",
-      isRequired: true,
-      createdBy: ids.users.diego,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.mobileDev,
-      key: "JWT_SECRET",
-      value: "mobile-dev-jwt-secret",
-      isSecret: true,
-      description: "JWT signing key for the dev environment",
-      isRequired: true,
-      createdBy: ids.users.diego,
-      rotatedDaysAgo: 14,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.mobileDev,
-      key: "FEATURE_FLAG_CHECKOUT_V2",
-      value: "true",
-      isSecret: false,
-      description: "Enables the new checkout path",
-      createdBy: ids.users.eve,
-    }),
-    buildConfigEntry({
-      id: ids.sharedEntries.mobileStagingJwt,
-      environmentId: ids.environments.mobileStaging,
-      key: "JWT_SECRET",
-      value: "mobile-staging-jwt-secret",
-      isSecret: true,
-      description: "JWT signing key for staging",
-      isRequired: true,
-      createdBy: ids.users.diego,
-      updatedBy: ids.users.alice,
-      rotatedDaysAgo: 4,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.mobileStaging,
-      key: "API_BASE_URL",
-      value: "https://staging-api.mobile.example.com",
-      isSecret: false,
-      description: "Staging API origin",
-      isRequired: true,
-      createdBy: ids.users.alice,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.mobileStaging,
-      key: "FIREBASE_CONFIG_JSON",
-      value: '{"projectId":"mobile-staging","appId":"1:123:web:abc"}',
-      isSecret: true,
-      description: "Firebase app credentials",
-      createdBy: ids.users.eve,
-      rotatedDaysAgo: 8,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.mobileProd,
-      key: "API_BASE_URL",
-      value: "https://api.mobile.example.com",
-      isSecret: false,
-      description: "Production API origin",
-      isRequired: true,
-      createdBy: ids.users.diego,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.mobileProd,
-      key: "APPLE_SHARED_SECRET",
-      value: "apple-prod-shared-secret",
-      isSecret: true,
-      description: "App Store subscription validation secret",
-      isRequired: true,
-      createdBy: ids.users.diego,
-      rotatedDaysAgo: 2,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.mobileProd,
-      key: "LOG_LEVEL",
-      value: "warn",
-      isSecret: false,
-      description: "Runtime log verbosity",
-      createdBy: ids.users.alice,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.marketingDev,
-      key: "NEXT_PUBLIC_SITE_URL",
-      value: "http://localhost:3001",
-      isSecret: false,
-      description: "Local site URL",
-      isRequired: true,
-      createdBy: ids.users.eve,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.marketingDev,
-      key: "CMS_PREVIEW_TOKEN",
-      value: "cms-preview-dev-token",
-      isSecret: true,
-      description: "Content preview token for local testing",
-      createdBy: ids.users.eve,
-      rotatedDaysAgo: 12,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.marketingDev,
-      key: "ENABLE_NEW_HOMEPAGE",
-      value: "false",
-      isSecret: false,
-      description: "Feature flag for the redesigned homepage",
-      createdBy: ids.users.bob,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.marketingStaging,
-      key: "NEXT_PUBLIC_SITE_URL",
-      value: "https://staging.marketing.example.com",
-      isSecret: false,
-      description: "Staging site URL",
-      isRequired: true,
-      createdBy: ids.users.eve,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.marketingStaging,
-      key: "CMS_SPACE_ID",
-      value: "marketing-staging-space",
-      isSecret: false,
-      description: "CMS space identifier",
-      createdBy: ids.users.bob,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.marketingStaging,
-      key: "ANALYTICS_API_KEY",
-      value: "analytics-staging-key",
-      isSecret: true,
-      description: "Analytics provider write key",
-      createdBy: ids.users.eve,
-      rotatedDaysAgo: 6,
-    }),
-    buildConfigEntry({
-      id: ids.sharedEntries.marketingProdCms,
-      environmentId: ids.environments.marketingProd,
-      key: "CMS_PREVIEW_TOKEN",
-      value: "cms-preview-prod-token",
-      isSecret: true,
-      description: "Production preview token for content editors",
-      isRequired: true,
-      createdBy: ids.users.eve,
-      updatedBy: ids.users.bob,
-      rotatedDaysAgo: 5,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.marketingProd,
-      key: "NEXT_PUBLIC_SITE_URL",
-      value: "https://www.example.com",
-      isSecret: false,
-      description: "Public production domain",
-      isRequired: true,
-      createdBy: ids.users.eve,
-    }),
-    buildConfigEntry({
-      environmentId: ids.environments.marketingProd,
-      key: "GA_MEASUREMENT_ID",
-      value: "G-ABC123XYZ",
-      isSecret: false,
-      description: "Google Analytics measurement id",
-      createdBy: ids.users.bob,
-    }),
-  ]
+    const alice = createdProfiles["alice@example.com"];
+    const bob = createdProfiles["bob@example.com"];
+    const carol = createdProfiles["carol@example.com"];
+    const david = createdProfiles["david@example.com"];
+    const eva = createdProfiles["eva@example.com"];
 
-  const auditLogRows = [
-    {
-      id: randomUUID(),
-      projectId: ids.projects.acme,
-      actorId: ids.users.alice,
-      action: "PROJECT_CREATED",
-      entityType: "project",
-      entityId: ids.projects.acme,
-      metadata: { source: "seed", projectName: "Acme SaaS Platform" },
-    },
-    {
-      id: randomUUID(),
-      projectId: ids.projects.acme,
-      actorId: ids.users.bob,
-      action: "CONFIG_ENTRY_UPDATED",
-      entityType: "config_entry",
-      entityId: ids.sharedEntries.acmeProdStripe,
-      metadata: { key: "STRIPE_SECRET_KEY", environment: "production" },
-    },
-    {
-      id: randomUUID(),
-      projectId: ids.projects.mobile,
-      actorId: ids.users.diego,
-      action: "PROJECT_CREATED",
-      entityType: "project",
-      entityId: ids.projects.mobile,
-      metadata: { source: "seed", projectName: "Mobile Commerce API" },
-    },
-    {
-      id: randomUUID(),
-      projectId: ids.projects.mobile,
-      actorId: ids.users.alice,
-      action: "SECRET_SHARED",
-      entityType: "config_entry",
-      entityId: ids.sharedEntries.mobileStagingJwt,
-      metadata: { key: "JWT_SECRET", recipient: "qa-team@example.com" },
-    },
-    {
-      id: randomUUID(),
-      projectId: ids.projects.marketing,
-      actorId: ids.users.eve,
-      action: "PROJECT_CREATED",
-      entityType: "project",
-      entityId: ids.projects.marketing,
-      metadata: { source: "seed", projectName: "Marketing Site" },
-    },
-    {
-      id: randomUUID(),
-      projectId: ids.projects.marketing,
-      actorId: ids.users.bob,
-      action: "SECRET_ROTATED",
-      entityType: "config_entry",
-      entityId: ids.sharedEntries.marketingProdCms,
-      metadata: { key: "CMS_PREVIEW_TOKEN", rotationReason: "routine" },
-    },
-  ]
+    // ─── Projects ─────────────────────────────────────────────────────────────
 
-  const shareLinkRows = [
-    {
-      id: randomUUID(),
-      configEntryId: ids.sharedEntries.acmeProdStripe,
-      token: "share_acme_prod_stripe",
-      createdBy: ids.users.alice,
-      expiresAt: daysFromNow(7),
-      maxViews: 5,
-      currentViews: 1,
-      revokedAt: null,
-    },
-    {
-      id: randomUUID(),
-      configEntryId: ids.sharedEntries.mobileStagingJwt,
-      token: "share_mobile_stage_jwt",
-      createdBy: ids.users.alice,
-      expiresAt: daysFromNow(3),
-      maxViews: 3,
-      currentViews: 0,
-      revokedAt: null,
-    },
-    {
-      id: randomUUID(),
-      configEntryId: ids.sharedEntries.marketingProdCms,
-      token: "share_marketing_prod_cms",
-      createdBy: ids.users.bob,
-      expiresAt: daysFromNow(1),
-      maxViews: 1,
-      currentViews: 1,
-      revokedAt: daysAgo(0),
-    },
-  ]
+    const projectsData = [
+        {
+            name: "Acme Platform",
+            description: "Core infrastructure for the Acme SaaS platform.",
+            owner: alice,
+            members: [
+                { profile: bob, role: MemberRole.EDITOR, canRevealSecrets: true, canShareSecrets: true },
+                { profile: carol, role: MemberRole.VIEWER, canRevealSecrets: false, canShareSecrets: false },
+            ],
+            environments: [
+                { name: "Development", slug: "development" },
+                { name: "Staging", slug: "staging" },
+                { name: "Production", slug: "production" },
+            ],
+        },
+        {
+            name: "Internal Tooling",
+            description: "Internal scripts and tooling for the engineering team.",
+            owner: bob,
+            members: [
+                { profile: david, role: MemberRole.EDITOR, canRevealSecrets: true, canShareSecrets: false },
+                { profile: eva, role: MemberRole.VIEWER, canRevealSecrets: false, canShareSecrets: false },
+                { profile: alice, role: MemberRole.EDITOR, canRevealSecrets: true, canShareSecrets: true },
+            ],
+            environments: [
+                { name: "Development", slug: "development" },
+                { name: "Production", slug: "production" },
+            ],
+        },
+        {
+            name: "Marketing Site",
+            description: "Public-facing marketing website and landing pages.",
+            owner: carol,
+            members: [
+                { profile: eva, role: MemberRole.EDITOR, canRevealSecrets: false, canShareSecrets: false },
+                { profile: bob, role: MemberRole.VIEWER, canRevealSecrets: false, canShareSecrets: false },
+            ],
+            environments: [
+                { name: "Preview", slug: "preview" },
+                { name: "Production", slug: "production" },
+            ],
+        },
+    ];
 
-  const sessionRows = [
-    {
-      id: randomUUID(),
-      userId: ids.users.alice,
-      sessionToken: randomBytes(32).toString("hex"),
-      expiresAt: daysFromNow(7),
-    },
-    {
-      id: randomUUID(),
-      userId: ids.users.diego,
-      sessionToken: randomBytes(32).toString("hex"),
-      expiresAt: daysFromNow(5),
-    },
-    {
-      id: randomUUID(),
-      userId: ids.users.eve,
-      sessionToken: randomBytes(32).toString("hex"),
-      expiresAt: daysFromNow(2),
-    },
-  ]
+    for (const proj of projectsData) {
+        const project = await prisma.project.create({
+            data: {
+                name: proj.name,
+                description: proj.description,
+                ownerId: proj.owner.id,
+            },
+        });
 
-  const passwordResetTokenRows = [
-    {
-      id: randomUUID(),
-      userId: ids.users.clara,
-      token: randomBytes(24).toString("hex"),
-      expiresAt: daysFromNow(1),
-      usedAt: null,
-    },
-    {
-      id: randomUUID(),
-      userId: ids.users.bob,
-      token: randomBytes(24).toString("hex"),
-      expiresAt: daysAgo(1),
-      usedAt: daysAgo(2),
-    },
-  ]
+        console.log(`\n  📁 Project: "${project.name}" (owner: ${proj.owner.fullName})`);
 
-  await prisma.$transaction(async (tx) => {
-    await tx.shareLink.deleteMany()
-    await tx.auditLog.deleteMany()
-    await tx.configEntry.deleteMany()
-    await tx.environment.deleteMany()
-    await tx.projectMember.deleteMany()
-    await tx.project.deleteMany()
-    await tx.session.deleteMany()
-    await tx.passwordResetToken.deleteMany()
-    await tx.profile.deleteMany()
-    await tx.userAuth.deleteMany()
+        // Owner entry in project_members
+        await prisma.projectMember.create({
+            data: {
+                projectId: project.id,
+                userId: proj.owner.id,
+                role: MemberRole.OWNER,
+                canRevealSecrets: true,
+                canShareSecrets: true,
+            },
+        });
 
-    await tx.userAuth.createMany({ data: userAuthRows })
-    await tx.profile.createMany({ data: profileRows })
-    await tx.project.createMany({ data: projectRows })
-    await tx.projectMember.createMany({ data: memberRows })
-    await tx.environment.createMany({ data: environmentRows })
-    await tx.configEntry.createMany({ data: configEntryRows })
-    await tx.auditLog.createMany({ data: auditLogRows })
-    await tx.shareLink.createMany({ data: shareLinkRows })
-    await tx.session.createMany({ data: sessionRows })
-    await tx.passwordResetToken.createMany({ data: passwordResetTokenRows })
-  })
+        // Other members
+        for (const m of proj.members) {
+            await prisma.projectMember.create({
+                data: {
+                    projectId: project.id,
+                    userId: m.profile.id,
+                    role: m.role,
+                    canRevealSecrets: m.canRevealSecrets,
+                    canShareSecrets: m.canShareSecrets,
+                },
+            });
+            console.log(`    👤 Member: ${m.profile.fullName} (${m.role})`);
+        }
 
-  console.log("Database seeded successfully")
-  console.log(`Users: ${users.length}`)
-  console.log(`Projects: ${projectRows.length}`)
-  console.log(`Project members: ${memberRows.length}`)
-  console.log(`Environments: ${environmentRows.length}`)
-  console.log(`Config entries: ${configEntryRows.length}`)
-  console.log(`Audit logs: ${auditLogRows.length}`)
-  console.log(`Share links: ${shareLinkRows.length}`)
-  console.log(`Sessions: ${sessionRows.length}`)
-  console.log(`Password reset tokens: ${passwordResetTokenRows.length}`)
-  console.log("")
-  console.log("Seed user credentials")
-  for (const user of users) {
-    console.log(`- ${user.email} / ${user.password}`)
-  }
+        // Environments + config entries
+        for (const env of proj.environments) {
+            const environment = await prisma.environment.create({
+                data: {
+                    projectId: project.id,
+                    name: env.name,
+                    slug: env.slug,
+                },
+            });
+
+            const isProd = env.slug === "production";
+
+            // Shared config entries per environment
+            const entries = [
+                {
+                    key: "APP_NAME",
+                    valuePlain: proj.name,
+                    isSecret: false,
+                    isRequired: true,
+                    description: "Human-readable application name",
+                },
+                {
+                    key: "DATABASE_URL",
+                    valueEncrypted: `enc:postgres://user:secret@db-${env.slug}.internal:5432/${project.name.toLowerCase().replace(/ /g, "_")}`,
+                    isSecret: true,
+                    isRequired: true,
+                    description: "Primary database connection string",
+                },
+                {
+                    key: "SECRET_KEY",
+                    valueEncrypted: `enc:${randomBytes(32).toString("hex")}`,
+                    isSecret: true,
+                    isRequired: true,
+                    description: "App secret key used for signing tokens",
+                },
+                {
+                    key: "LOG_LEVEL",
+                    valuePlain: isProd ? "warn" : "debug",
+                    isSecret: false,
+                    isRequired: false,
+                    description: "Logging verbosity level",
+                },
+                {
+                    key: "FEATURE_FLAG_NEW_UI",
+                    valuePlain: isProd ? "false" : "true",
+                    isSecret: false,
+                    isRequired: false,
+                    description: "Toggle for the redesigned UI rollout",
+                },
+            ];
+
+            for (const entry of entries) {
+                await prisma.configEntry.create({
+                    data: {
+                        environmentId: environment.id,
+                        key: entry.key,
+                        valuePlain: entry.valuePlain ?? null,
+                        valueEncrypted: entry.valueEncrypted ?? null,
+                        isSecret: entry.isSecret,
+                        isRequired: entry.isRequired,
+                        description: entry.description,
+                        createdBy: proj.owner.id,
+                        updatedBy: proj.owner.id,
+                    },
+                });
+            }
+
+            console.log(`    🌍 Environment: ${env.name} (${entries.length} config entries)`);
+        }
+
+        // Audit log — project created
+        await prisma.auditLog.create({
+            data: {
+                projectId: project.id,
+                actorId: proj.owner.id,
+                action: "PROJECT_CREATED",
+                entityType: "Project",
+                entityId: project.id,
+                metadata: { projectName: project.name },
+            },
+        });
+    }
+
+    // ─── Sessions ─────────────────────────────────────────────────────────────
+
+    const userAuths = await prisma.userAuth.findMany();
+    for (const userAuth of userAuths) {
+        await prisma.session.create({
+            data: {
+                userId: userAuth.id,
+                sessionToken: randomBytes(48).toString("hex"),
+                expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 days
+            },
+        });
+    }
+
+    console.log("\n  🔐 Created sessions for all users");
+    console.log("\n✨ Seed complete!");
 }
 
 main()
-  .catch((error) => {
-    console.error("Seed failed")
-    console.error(error)
-    process.exit(1)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
+    .catch((e) => {
+        console.error(e);
+        process.exit(1);
+    })
+    .finally(() => prisma.$disconnect());
