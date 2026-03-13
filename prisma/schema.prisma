@@ -1,0 +1,175 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MemberRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
+model UserAuth {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  profile  Profile?
+  sessions Session[]
+  resetTokens PasswordResetToken[]
+
+  @@map("user_auth")
+}
+
+model Profile {
+  id        String   @id @default(uuid()) @db.Uuid
+  fullName  String   @map("full_name")
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  projects       Project[]
+  projectMembers ProjectMember[]
+  auditLogs      AuditLog[]      @relation("AuditActor")
+  createdEntries ConfigEntry[]   @relation("EntryCreator")
+  updatedEntries ConfigEntry[]   @relation("EntryUpdater")
+  shareLinks     ShareLink[]
+  userAuth       UserAuth?       @relation(fields: [id], references: [id])
+
+  @@map("profiles")
+}
+
+model Project {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  description String?  @db.Text
+  ownerId     String   @map("owner_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  owner        Profile         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  members      ProjectMember[]
+  environments Environment[]
+  auditLogs    AuditLog[]
+
+  @@map("projects")
+}
+
+model ProjectMember {
+  id              String     @id @default(uuid()) @db.Uuid
+  projectId       String     @map("project_id") @db.Uuid
+  userId          String     @map("user_id") @db.Uuid
+  role            MemberRole @default(VIEWER)
+  canRevealSecrets Boolean   @default(false) @map("can_reveal_secrets")
+  canShareSecrets  Boolean   @default(false) @map("can_share_secrets")
+  createdAt       DateTime   @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@map("project_members")
+}
+
+model Environment {
+  id        String   @id @default(uuid()) @db.Uuid
+  projectId String   @map("project_id") @db.Uuid
+  name      String
+  slug      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  entries ConfigEntry[]
+
+  @@unique([projectId, slug])
+  @@map("environments")
+}
+
+model ConfigEntry {
+  id             String    @id @default(uuid()) @db.Uuid
+  environmentId  String    @map("environment_id") @db.Uuid
+  key            String
+  valueEncrypted String?   @map("value_encrypted") @db.Text
+  valuePlain     String?   @map("value_plain") @db.Text
+  isSecret       Boolean   @default(false) @map("is_secret")
+  description    String?   @db.Text
+  isRequired     Boolean   @default(false) @map("is_required")
+  lastRotatedAt  DateTime? @map("last_rotated_at")
+  createdBy      String    @map("created_by") @db.Uuid
+  updatedBy      String    @map("updated_by") @db.Uuid
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  environment Environment @relation(fields: [environmentId], references: [id], onDelete: Cascade)
+  creator     Profile     @relation("EntryCreator", fields: [createdBy], references: [id])
+  updater     Profile     @relation("EntryUpdater", fields: [updatedBy], references: [id])
+  shareLinks  ShareLink[]
+
+  @@unique([environmentId, key])
+  @@map("config_entries")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  projectId  String   @map("project_id") @db.Uuid
+  actorId    String   @map("actor_id") @db.Uuid
+  action     String
+  entityType String   @map("entity_type")
+  entityId   String?  @map("entity_id") @db.Uuid
+  metadata   Json?    @db.JsonB
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  actor   Profile @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([projectId, createdAt])
+  @@map("audit_logs")
+}
+
+model ShareLink {
+  id            String    @id @default(uuid()) @db.Uuid
+  configEntryId String    @map("config_entry_id") @db.Uuid
+  token         String    @unique
+  createdBy     String    @map("created_by") @db.Uuid
+  expiresAt     DateTime  @map("expires_at")
+  maxViews      Int       @default(1) @map("max_views")
+  currentViews  Int       @default(0) @map("current_views")
+  revokedAt     DateTime? @map("revoked_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  configEntry ConfigEntry @relation(fields: [configEntryId], references: [id], onDelete: Cascade)
+  creator     Profile     @relation(fields: [createdBy], references: [id])
+
+  @@map("share_links")
+}
+
+model Session {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  sessionToken String   @unique @map("session_token")
+  expiresAt    DateTime @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user UserAuth @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  token     String    @unique
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user UserAuth @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}

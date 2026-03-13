@@ -1,0 +1,46 @@
+export const AUDIT_ACTIONS = {
+  PROJECT_CREATED: "project.created",
+  PROJECT_UPDATED: "project.updated",
+  PROJECT_DELETED: "project.deleted",
+  MEMBER_INVITED: "member.invited",
+  MEMBER_ROLE_CHANGED: "member.role_changed",
+  MEMBER_REMOVED: "member.removed",
+  ENVIRONMENT_CREATED: "environment.created",
+  ENVIRONMENT_DELETED: "environment.deleted",
+  CONFIG_CREATED: "config.created",
+  CONFIG_UPDATED: "config.updated",
+  CONFIG_DELETED: "config.deleted",
+  SECRET_REVEALED: "secret.revealed",
+  SECRET_ROTATED: "secret.rotated",
+  CONFIG_DUPLICATED: "config.duplicated",
+  SHARE_LINK_CREATED: "share_link.created",
+  SHARE_LINK_REVOKED: "share_link.revoked",
+  SHARE_LINK_VIEWED: "share_link.viewed",
+  CONFIG_IMPORTED: "config.imported",
+  CONFIG_EXPORTED: "config.exported",
+} as const;
+
+export function humanizeAction(action: string): string {
+  const map: Record<string, string> = {
+    "project.created": "Created project",
+    "project.updated": "Updated project",
+    "project.deleted": "Deleted project",
+    "member.invited": "Invited member",
+    "member.role_changed": "Changed member role",
+    "member.removed": "Removed member",
+    "environment.created": "Created environment",
+    "environment.deleted": "Deleted environment",
+    "config.created": "Created config entry",
+    "config.updated": "Updated config entry",
+    "config.deleted": "Deleted config entry",
+    "secret.revealed": "Revealed secret",
+    "secret.rotated": "Rotated secret",
+    "config.duplicated": "Duplicated config entry",
+    "share_link.created": "Created share link",
+    "share_link.revoked": "Revoked share link",
+    "share_link.viewed": "Viewed shared secret",
+    "config.imported": "Imported config entries",
+    "config.exported": "Exported config entries",
+  };
+  return map[action] ?? action;
+}
