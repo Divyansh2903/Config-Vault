@@ -12,7 +12,7 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-    console.log("🌱 Starting seed...");
+    console.log("Starting seed...");
 
     // ─── Users ────────────────────────────────────────────────────────────────
 
@@ -44,7 +44,7 @@ async function main() {
         });
 
         createdProfiles[u.email] = userAuth.profile!;
-        console.log(`  ✅ Created user: ${u.fullName} <${u.email}>`);
+        console.log(`  Created user: ${u.fullName} <${u.email}>`);
     }
 
     const alice = createdProfiles["alice@example.com"];
@@ -108,7 +108,7 @@ async function main() {
             },
         });
 
-        console.log(`\n  📁 Project: "${project.name}" (owner: ${proj.owner.fullName})`);
+        console.log(`\n  Project: "${project.name}" (owner: ${proj.owner.fullName})`);
 
         // Owner entry in project_members
         await prisma.projectMember.create({
@@ -132,7 +132,7 @@ async function main() {
                     canShareSecrets: m.canShareSecrets,
                 },
             });
-            console.log(`    👤 Member: ${m.profile.fullName} (${m.role})`);
+            console.log(`    Member: ${m.profile.fullName} (${m.role})`);
         }
 
         // Environments + config entries
@@ -202,7 +202,7 @@ async function main() {
                 });
             }
 
-            console.log(`    🌍 Environment: ${env.name} (${entries.length} config entries)`);
+            console.log(`    Environment: ${env.name} (${entries.length} config entries)`);
         }
 
         // Audit log — project created
@@ -231,8 +231,8 @@ async function main() {
         });
     }
 
-    console.log("\n  🔐 Created sessions for all users");
-    console.log("\n✨ Seed complete!");
+    console.log("\n  Created sessions for all users");
+    console.log("\nSeed complete!");
 }
 
 main()

@@ -6,8 +6,6 @@ import { ProjectCard } from "@/components/projects/project-card";
 import { EmptyState } from "@/components/layout/empty-state";
 import { getUserProjects } from "@/lib/data/projects";
 
-export const dynamic = "force-dynamic";
-
 export default async function ProjectsPage() {
   const { profile } = await requireUser();
 

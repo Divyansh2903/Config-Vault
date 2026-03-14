@@ -8,8 +8,6 @@ import { ProjectCard } from "@/components/projects/project-card";
 import { EmptyState } from "@/components/layout/empty-state";
 import { getDashboardData } from "@/lib/data/dashboard";
 
-export const dynamic = "force-dynamic";
-
 export default async function DashboardPage() {
   let profile;
   try {

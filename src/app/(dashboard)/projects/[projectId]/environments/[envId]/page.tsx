@@ -6,8 +6,6 @@ import { can } from "@/lib/permissions";
 import { ConfigTableClient } from "@/components/config/config-table-client";
 import { getEnvironmentMeta } from "@/lib/data/environments";
 
-export const dynamic = "force-dynamic";
-
 export default async function EnvironmentDetailPage({
   params,
 }: {
@@ -20,20 +18,21 @@ export default async function EnvironmentDetailPage({
     redirect(`/projects/${projectId}`);
   }
 
-  const environment = await getEnvironmentMeta(envId);
+  const [environment, member] = await Promise.all([
+    getEnvironmentMeta(envId),
+    prisma.projectMember.findUnique({
+      where: {
+        projectId_userId: {
+          projectId,
+          userId: profile.id,
+        },
+      },
+    }),
+  ]);
 
   if (!environment || environment.projectId !== projectId) {
     redirect(`/projects/${projectId}`);
   }
-
-  const member = await prisma.projectMember.findUnique({
-    where: {
-      projectId_userId: {
-        projectId,
-        userId: profile.id,
-      },
-    },
-  });
 
   if (!member) redirect("/projects");
 

@@ -7,9 +7,7 @@ import { humanizeAction } from "@/lib/audit/logger";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { EnvironmentCard } from "@/components/projects/environment-card";
-import { getProjectOverview } from "@/lib/data/projects";
-
-export const dynamic = "force-dynamic";
+import { getProjectOverviewCached } from "@/lib/data/projects";
 
 export default async function ProjectOverviewPage({
   params,
@@ -19,7 +17,7 @@ export default async function ProjectOverviewPage({
   const { projectId } = await params;
   const { profile } = await requireUser();
 
-  const overview = await getProjectOverview(projectId, profile.id);
+  const overview = await getProjectOverviewCached(projectId, profile.id);
 
   if (!overview) redirect("/projects");
 

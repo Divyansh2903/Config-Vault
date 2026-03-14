@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db/prisma";
 
@@ -92,6 +93,9 @@ export const getProjectOverview = unstable_cache(
     revalidate: 30,
   },
 );
+
+/** Request-scoped cached wrapper so layout and overview page share one fetch. */
+export const getProjectOverviewCached = cache(getProjectOverview);
 
 export const getProjectMembers = unstable_cache(
   async (projectId: string) => {
