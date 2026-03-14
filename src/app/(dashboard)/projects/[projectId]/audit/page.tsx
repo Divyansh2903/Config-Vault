@@ -25,15 +25,17 @@ export default async function AuditLogPage({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-semibold tracking-tight">
+      <div className="animate-fade-in-up">
+        <h1 className="font-display text-2xl font-bold tracking-tight">
           Audit Log
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           Track all activity and changes within this project.
         </p>
       </div>
-      <AuditLogClient projectId={projectId} members={memberList} />
+      <div className="animate-fade-in-up delay-100">
+        <AuditLogClient projectId={projectId} members={memberList} />
+      </div>
     </div>
   );
 }

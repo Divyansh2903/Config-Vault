@@ -21,7 +21,7 @@ export function ProjectSubNav({ projectId, isOwner }: ProjectSubNavProps) {
   ];
 
   return (
-    <nav className="mb-6 flex gap-1 border-b">
+    <nav className="mb-8 flex gap-1 border-b border-border/60 pb-px">
       {links.map((link) => {
         const isActive =
           link.href === base
@@ -33,13 +33,16 @@ export function ProjectSubNav({ projectId, isOwner }: ProjectSubNavProps) {
             key={link.href}
             href={link.href}
             className={cn(
-              "-mb-px px-3 py-2 text-sm font-medium transition-colors",
+              "relative -mb-px rounded-t-lg px-4 py-2 text-sm font-medium transition-all duration-200",
               isActive
-                ? "border-b-2 border-foreground text-foreground"
-                : "text-muted-foreground hover:text-foreground",
+                ? "text-foreground"
+                : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
             )}
           >
             {link.label}
+            {isActive && (
+              <span className="absolute right-2 bottom-0 left-2 h-0.5 rounded-full bg-primary animate-scale-in" />
+            )}
           </Link>
         );
       })}

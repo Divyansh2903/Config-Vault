@@ -150,13 +150,14 @@ export function MemberManagementClient({
     <>
       {isOwner && (
         <div className="flex justify-end">
-          <Button size="sm" onClick={() => setInviteOpen(true)}>
+          <Button size="sm" onClick={() => setInviteOpen(true)} className="shadow-sm shadow-primary/10">
             <UserPlus className="size-4" />
             Invite Member
           </Button>
         </div>
       )}
 
+      <div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm">
       <Table>
         <TableHeader>
           <TableRow>
@@ -257,6 +258,7 @@ export function MemberManagementClient({
           ))}
         </TableBody>
       </Table>
+      </div>
 
       <InviteMemberDialog
         projectId={projectId}

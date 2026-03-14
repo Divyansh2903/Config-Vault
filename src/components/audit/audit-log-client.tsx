@@ -260,6 +260,7 @@ export function AuditLogClient({
         <EmptyState hasFilters={!!hasFilters} />
       ) : (
         <>
+          <div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm">
           <Table>
             <TableHeader>
               <TableRow>
@@ -297,6 +298,7 @@ export function AuditLogClient({
               ))}
             </TableBody>
           </Table>
+          </div>
 
           {/* Pagination */}
           <div className="flex items-center justify-between text-sm">

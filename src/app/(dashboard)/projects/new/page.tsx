@@ -53,13 +53,13 @@ export default function NewProjectPage() {
     <div className="max-w-lg">
       <Link
         href="/projects"
-        className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+        className="animate-fade-in mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="size-4" />
         Back to projects
       </Link>
 
-      <h1 className="mb-6 font-display text-2xl font-bold">New Project</h1>
+      <h1 className="animate-fade-in-up delay-100 mb-6 font-display text-2xl font-bold tracking-tight">New Project</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">

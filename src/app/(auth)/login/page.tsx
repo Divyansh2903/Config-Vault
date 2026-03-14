@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod/v4";
 import { toast } from "sonner";
-import { Shield } from "lucide-react";
+import { Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
 import { loginSchema } from "@/lib/validations/schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +26,7 @@ type LoginValues = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -38,7 +39,6 @@ export default function LoginPage() {
 
   async function onSubmit(data: LoginValues) {
     setLoading(true);
-    console.log("[Login] Starting login for:", data.email);
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -53,11 +53,9 @@ export default function LoginPage() {
         return;
       }
 
-      console.log("[Login] Login successful, redirecting to dashboard...");
       router.push("/dashboard");
       router.refresh();
-    } catch (err) {
-      console.error("[Login] Unexpected error:", err);
+    } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -65,24 +63,25 @@ export default function LoginPage() {
   }
 
   return (
-    <Card className="w-full max-w-sm shadow-lg shadow-primary/5">
-      <CardHeader className="text-center">
-        <div className="mx-auto mb-2 flex size-10 items-center justify-center rounded-xl bg-linear-to-br from-primary to-primary/80 text-primary-foreground shadow-md shadow-primary/20">
-          <Shield className="size-5" />
-        </div>
-        <CardTitle className="font-display text-xl">Welcome back</CardTitle>
-        <CardDescription>Sign in to your ConfigVault account</CardDescription>
+    <Card className="w-full border-border/60 shadow-xl shadow-black/[0.04] dark:shadow-black/25">
+      <CardHeader className="space-y-1.5 pb-2 text-center">
+        <CardTitle className="font-display text-2xl font-bold tracking-tight">Welcome back</CardTitle>
+        <CardDescription className="text-[13px]">
+          Sign in to your ConfigVault account
+        </CardDescription>
       </CardHeader>
 
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-          <div className="grid gap-1.5">
-            <Label htmlFor="email">Email</Label>
+      <CardContent className="pt-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-5">
+          <div className="grid gap-2">
+            <Label htmlFor="email" className="text-[13px]">Email address</Label>
             <Input
               id="email"
               type="email"
               placeholder="you@example.com"
               autoComplete="email"
+              autoFocus
+              className="h-10"
               aria-invalid={!!errors.email}
               {...register("email")}
             />
@@ -91,16 +90,27 @@ export default function LoginPage() {
             )}
           </div>
 
-          <div className="grid gap-1.5">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              autoComplete="current-password"
-              aria-invalid={!!errors.password}
-              {...register("password")}
-            />
+          <div className="grid gap-2">
+            <Label htmlFor="password" className="text-[13px]">Password</Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                className="h-10 pr-10"
+                aria-invalid={!!errors.password}
+                {...register("password")}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-0 top-0 flex h-10 w-10 items-center justify-center text-muted-foreground/60 transition-colors hover:text-muted-foreground"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-xs text-destructive">
                 {errors.password.message}
@@ -108,17 +118,31 @@ export default function LoginPage() {
             )}
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Signing in…" : "Sign in"}
+          <Button
+            type="submit"
+            className="mt-1 h-10 w-full gap-2 text-[13px] font-semibold shadow-md shadow-primary/10"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="size-4 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              <>
+                Sign in
+                <ArrowRight className="size-3.5" />
+              </>
+            )}
           </Button>
         </form>
       </CardContent>
 
-      <CardFooter className="justify-center">
-        <p className="text-sm text-muted-foreground">
+      <CardFooter className="justify-center border-t border-border/40 pt-4">
+        <p className="text-[13px] text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-primary hover:underline">
-            Sign up
+          <Link href="/register" className="font-semibold text-primary transition-colors hover:text-primary/80">
+            Create one
           </Link>
         </p>
       </CardFooter>

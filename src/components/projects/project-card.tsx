@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { format } from "date-fns";
-import { Users, GitBranch } from "lucide-react";
+import { Users, GitBranch, ArrowUpRight } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -26,29 +26,32 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <Link href={`/projects/${project.id}`} className="block">
-      <Card className="transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-md hover:shadow-primary/5">
-        <CardHeader>
-          <CardTitle className="font-display">{project.name}</CardTitle>
+    <Link href={`/projects/${project.id}`} className="group block">
+      <Card className="relative overflow-hidden border-border/60 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5">
+        <div className="pointer-events-none absolute top-0 right-0 p-3 text-muted-foreground/0 transition-all duration-300 group-hover:text-muted-foreground/40">
+          <ArrowUpRight className="size-4" />
+        </div>
+        <CardHeader className="pb-2">
+          <CardTitle className="font-display text-base">{project.name}</CardTitle>
           {project.description && (
-            <CardDescription className="line-clamp-2">
+            <CardDescription className="line-clamp-2 text-[13px]">
               {project.description}
             </CardDescription>
           )}
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-3">
-            <Badge variant="secondary" className="gap-1">
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="gap-1 text-xs">
               <Users className="size-3" />
               {project._count.members}
             </Badge>
-            <Badge variant="secondary" className="gap-1">
+            <Badge variant="secondary" className="gap-1 text-xs">
               <GitBranch className="size-3" />
               {project._count.environments}
             </Badge>
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="border-t border-border/40 pt-3">
           <span className="text-xs text-muted-foreground">
             Created {format(project.createdAt, "MMM d, yyyy")}
           </span>

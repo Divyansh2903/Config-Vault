@@ -28,26 +28,28 @@ export default async function MembersPage({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-bold">Members</h1>
-        <p className="text-muted-foreground">
+      <div className="animate-fade-in-up">
+        <h1 className="font-display text-2xl font-bold tracking-tight">Members</h1>
+        <p className="mt-1 text-muted-foreground">
           Manage who has access to this project
         </p>
       </div>
 
-      <MemberManagementClient
-        projectId={projectId}
-        members={sortedMembers.map((m) => ({
-          id: m.id,
-          userId: m.userId,
-          role: m.role,
-          canRevealSecrets: m.canRevealSecrets,
-          canShareSecrets: m.canShareSecrets,
-          user: m.user,
-        }))}
-        isOwner={isOwner}
-        currentUserId={profile.id}
-      />
+      <div className="animate-fade-in-up delay-100">
+        <MemberManagementClient
+          projectId={projectId}
+          members={sortedMembers.map((m) => ({
+            id: m.id,
+            userId: m.userId,
+            role: m.role,
+            canRevealSecrets: m.canRevealSecrets,
+            canShareSecrets: m.canShareSecrets,
+            user: m.user,
+          }))}
+          isOwner={isOwner}
+          currentUserId={profile.id}
+        />
+      </div>
     </div>
   );
 }

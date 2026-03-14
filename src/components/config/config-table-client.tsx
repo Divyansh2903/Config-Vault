@@ -15,8 +15,10 @@ import {
   Trash2,
   ArrowUpDown,
   Settings2,
+  Filter,
 } from "lucide-react";
 import type { SafeConfigEntry } from "@/types";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -147,54 +149,84 @@ export function ConfigTableClient({
     return <TableSkeleton />;
   }
 
+  const secretCount = entries.filter((e) => e.isSecret).length;
+  const requiredCount = entries.filter((e) => e.isRequired).length;
+
   return (
     <>
       <div className="space-y-4">
+        {/* Summary bar */}
+        {entries.length > 0 && (
+          <div className="animate-fade-in flex items-center gap-4 text-sm text-muted-foreground">
+            <span className="tabular-nums">
+              <span className="font-medium text-foreground">{entries.length}</span> entries
+            </span>
+            {secretCount > 0 && (
+              <span className="tabular-nums">
+                <span className="font-medium text-foreground">{secretCount}</span> secrets
+              </span>
+            )}
+            {requiredCount > 0 && (
+              <span className="tabular-nums">
+                <span className="font-medium text-foreground">{requiredCount}</span> required
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Toolbar */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative max-w-sm flex-1">
-            <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/60" />
             <Input
-              placeholder="Filter by key name…"
+              placeholder="Filter by key name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-8"
             />
           </div>
           {canEdit && (
-            <Button onClick={() => setCreateOpen(true)}>
+            <Button onClick={() => setCreateOpen(true)} className="shadow-sm shadow-primary/10">
               <Plus className="size-4" />
               Add Entry
             </Button>
           )}
         </div>
 
+        {/* Filters */}
         <div className="flex items-center gap-2">
-          <div className="flex gap-1">
+          <div className="flex rounded-lg border border-border/60 bg-muted/30 p-0.5">
             {(["all", "secrets", "required"] as const).map((f) => (
-              <Button
+              <button
                 key={f}
-                variant={filter === f ? "secondary" : "ghost"}
-                size="sm"
                 onClick={() => setFilter(f)}
+                className={cn(
+                  "rounded-md px-3 py-1 text-xs font-medium transition-all duration-200",
+                  filter === f
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
               >
                 {f === "all"
                   ? "All"
                   : f === "secrets"
-                    ? "Secrets Only"
-                    : "Required Only"}
-              </Button>
+                    ? "Secrets"
+                    : "Required"}
+              </button>
             ))}
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setSort((s) => (s === "key" ? "updated" : "key"))}
+            className="ml-auto gap-1.5 text-xs text-muted-foreground"
           >
-            <ArrowUpDown className="size-3.5" />
-            {sort === "key" ? "Key (A-Z)" : "Last Updated"}
+            <ArrowUpDown className="size-3" />
+            {sort === "key" ? "A-Z" : "Recent"}
           </Button>
         </div>
 
+        {/* Table */}
         {filtered.length === 0 ? (
           entries.length === 0 ? (
             <EmptyState
@@ -212,30 +244,31 @@ export function ConfigTableClient({
             />
           )
         ) : (
-          <div className="rounded-lg border">
+          <div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Key</TableHead>
-                  <TableHead>Value</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Required</TableHead>
-                  <TableHead>Description</TableHead>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="font-semibold">Key</TableHead>
+                  <TableHead className="font-semibold">Value</TableHead>
+                  <TableHead className="font-semibold">Type</TableHead>
+                  <TableHead className="font-semibold">Required</TableHead>
+                  <TableHead className="font-semibold">Description</TableHead>
                   <TableHead className="w-12" />
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filtered.map((entry) => (
-                  <TableRow key={entry.id}>
+                  <TableRow key={entry.id} className="group/row transition-colors">
                     <TableCell>
                       <div className="flex items-center gap-1.5">
-                        <code className="font-mono text-sm font-medium">
+                        <code className="rounded bg-muted/50 px-1.5 py-0.5 font-mono text-sm font-medium">
                           {entry.key}
                         </code>
                         <Button
                           variant="ghost"
                           size="icon-xs"
                           onClick={() => handleCopyKey(entry.key)}
+                          className="opacity-0 transition-opacity group-hover/row:opacity-100"
                         >
                           <Copy className="size-3" />
                         </Button>
@@ -244,8 +277,8 @@ export function ConfigTableClient({
                     <TableCell className="max-w-[200px]">
                       {entry.isSecret ? (
                         <div className="flex items-center gap-1.5">
-                          <span className="font-mono text-muted-foreground">
-                            ••••••••
+                          <span className="font-mono text-sm tracking-wider text-muted-foreground">
+                            ********
                           </span>
                           {canRevealSecrets && (
                             <Button
@@ -257,6 +290,7 @@ export function ConfigTableClient({
                                   key: entry.key,
                                 })
                               }
+                              className="opacity-0 transition-opacity group-hover/row:opacity-100"
                             >
                               <Eye className="size-3" />
                             </Button>
@@ -273,18 +307,24 @@ export function ConfigTableClient({
                     </TableCell>
                     <TableCell>
                       {entry.isRequired && (
-                        <Badge variant="outline">Required</Badge>
+                        <Badge variant="outline" className="text-xs">Required</Badge>
                       )}
                     </TableCell>
                     <TableCell className="max-w-[150px]">
                       <span className="block truncate text-sm text-muted-foreground">
-                        {entry.description || "—"}
+                        {entry.description || "\u2014"}
                       </span>
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger
-                          render={<Button variant="ghost" size="icon-xs" />}
+                          render={
+                            <Button
+                              variant="ghost"
+                              size="icon-xs"
+                              className="opacity-0 transition-opacity group-hover/row:opacity-100"
+                            />
+                          }
                         >
                           <MoreHorizontal className="size-4" />
                         </DropdownMenuTrigger>
@@ -356,7 +396,7 @@ export function ConfigTableClient({
                               >
                                 <Trash2 className="size-4" />
                                 {deletingId === entry.id
-                                  ? "Deleting…"
+                                  ? "Deleting\u2026"
                                   : "Delete"}
                               </DropdownMenuItem>
                             </>
@@ -431,14 +471,13 @@ function TableSkeleton() {
         <Skeleton className="h-8 w-24" />
       </div>
       <div className="flex gap-2">
-        <Skeleton className="h-7 w-16" />
-        <Skeleton className="h-7 w-24" />
-        <Skeleton className="h-7 w-28" />
+        <Skeleton className="h-7 w-48" />
+        <Skeleton className="h-7 w-20 ml-auto" />
       </div>
-      <div className="rounded-lg border">
-        <div className="space-y-3 p-4">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4">
+      <div className="overflow-hidden rounded-xl border border-border/60">
+        <div className="space-y-0">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className={cn("flex items-center gap-4 px-4 py-3", i !== 5 && "border-b border-border/40")}>
               <Skeleton className="h-5 w-32" />
               <Skeleton className="h-5 w-24" />
               <Skeleton className="h-5 w-16" />

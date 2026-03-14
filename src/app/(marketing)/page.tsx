@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Layers, Shield, ScrollText, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Layers, Shield, ScrollText, ArrowRight, CheckCircle2, Lock, Eye, GitBranch } from "lucide-react";
 import { buttonVariants } from "@/lib/button-variants";
 import {
   Card,
@@ -13,28 +13,34 @@ import { cn } from "@/lib/utils";
 const features = [
   {
     icon: Layers,
-    title: "Environment-aware Config Management",
+    title: "Environment-aware Config",
     description:
-      "Organize config entries across development, staging, and production environments. Track required keys and ensure deployment readiness.",
+      "Organize config entries across development, staging, and production. Track required keys and ensure deployment readiness.",
   },
   {
     icon: Shield,
-    title: "Secure Secret Access & Sharing",
+    title: "Encrypted Secret Storage",
     description:
-      "Store secrets with AES-256 encryption. Control who can reveal, rotate, and share secrets with time-limited, view-limited share links.",
+      "AES-256 encryption for sensitive values. Granular permissions for who can reveal, rotate, and share secrets.",
   },
   {
     icon: ScrollText,
-    title: "Audit Trails & Deployment Readiness",
+    title: "Audit Trails & Compliance",
     description:
-      "Every action is logged. Compare environments to spot missing required config keys before deployment.",
+      "Every action is logged with full context. Compare environments to spot missing config before deployment.",
   },
 ];
 
 const steps = [
-  { number: "01", title: "Create a project", description: "Set up a new project in seconds and invite your team." },
-  { number: "02", title: "Define environments", description: "Add development, staging, production — or any custom stage." },
-  { number: "03", title: "Add and manage config entries", description: "Store secrets and config values with full version history." },
+  { number: "01", title: "Create a project", description: "Set up a new project in seconds and invite your team members." },
+  { number: "02", title: "Define environments", description: "Add development, staging, production — or any custom stage you need." },
+  { number: "03", title: "Manage config entries", description: "Store secrets and config values with encryption and full audit history." },
+];
+
+const stats = [
+  { icon: Lock, value: "AES-256", label: "Encryption" },
+  { icon: Eye, value: "Full", label: "Audit Trail" },
+  { icon: GitBranch, value: "Multi-env", label: "Support" },
 ];
 
 export default function LandingPage() {
@@ -42,23 +48,27 @@ export default function LandingPage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden border-b">
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,oklch(0.55_0.15_195/0.12),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,oklch(0.55_0.15_195/0.08),transparent)]" />
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-size-[4rem_4rem] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.025)_1px,transparent_1px)]" />
+        {/* Background layers */}
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_50%_at_50%_-10%,oklch(0.50_0.13_175/0.10),transparent)] dark:bg-[radial-gradient(ellipse_70%_50%_at_50%_-10%,oklch(0.68_0.14_175/0.07),transparent)]" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(0,0,0,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.015)_1px,transparent_1px)] bg-size-[5rem_5rem] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)]" />
+        <div className="pointer-events-none absolute right-0 bottom-0 -z-10 h-64 w-64 rounded-full bg-[radial-gradient(circle,oklch(0.50_0.13_175/0.04),transparent_70%)] blur-3xl dark:bg-[radial-gradient(circle,oklch(0.68_0.14_175/0.03),transparent_70%)]" />
 
-        <div className="mx-auto max-w-4xl px-6 py-28 text-center sm:py-36">
-          <div className="animate-fade-in-up mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary">
+        <div className="mx-auto max-w-4xl px-6 py-32 text-center sm:py-40">
+          <div className="animate-fade-in-up mb-8 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-primary uppercase">
             <Shield className="size-3" />
-            Secure config management for teams
+            Secure config for teams
           </div>
 
-          <h1 className="animate-fade-in-up delay-100 font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            Manage secrets and config{" "}
-            <span className="bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              safely across environments
+          <h1 className="animate-fade-in-up delay-100 font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            Manage secrets & config{" "}
+            <span className="relative inline-block">
+              <span className="bg-linear-to-r from-primary via-primary/85 to-primary/65 bg-clip-text text-transparent">
+                across environments
+              </span>
             </span>
           </h1>
 
-          <p className="animate-fade-in-up delay-200 mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          <p className="animate-fade-in-up delay-200 mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             ConfigVault helps development teams securely store, share, and audit
             environment variables and configuration values across projects and
             deployment stages.
@@ -67,17 +77,28 @@ export default function LandingPage() {
           <div className="animate-fade-in-up delay-300 mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/register"
-              className={cn(buttonVariants({ size: "lg" }), "gap-2 shadow-md shadow-primary/20")}
+              className={cn(buttonVariants({ size: "lg" }), "gap-2 px-6 shadow-lg shadow-primary/15 transition-shadow hover:shadow-xl hover:shadow-primary/20")}
             >
-              Get Started
-              <ArrowRight className="size-4" />
+              Get Started Free
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
               href="/dashboard"
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
+              className={cn(buttonVariants({ variant: "outline", size: "lg" }), "px-6")}
             >
               View Dashboard
             </Link>
+          </div>
+
+          {/* Trust indicators */}
+          <div className="animate-fade-in-up delay-500 mx-auto mt-16 flex max-w-md items-center justify-center gap-8 sm:gap-12">
+            {stats.map((stat) => (
+              <div key={stat.label} className="flex flex-col items-center gap-1">
+                <stat.icon className="mb-1 size-4 text-primary/60" />
+                <span className="font-display text-sm font-bold text-foreground">{stat.value}</span>
+                <span className="text-[11px] tracking-wide text-muted-foreground uppercase">{stat.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -85,7 +106,8 @@ export default function LandingPage() {
       {/* Features */}
       <section id="features" className="border-b">
         <div className="mx-auto max-w-6xl px-6 py-24">
-          <div className="mb-14 text-center">
+          <div className="mb-16 text-center">
+            <p className="mb-3 text-xs font-semibold tracking-widest text-primary uppercase">Features</p>
             <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
               Everything you need to manage config
             </h2>
@@ -96,16 +118,23 @@ export default function LandingPage() {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature) => (
+            {features.map((feature, i) => (
               <Card
                 key={feature.title}
-                className="transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
+                className={cn(
+                  "group relative overflow-hidden border-border/60 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5",
+                  "animate-fade-in-up",
+                  i === 0 && "delay-100",
+                  i === 1 && "delay-200",
+                  i === 2 && "delay-300"
+                )}
               >
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/[0.02] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <CardHeader>
-                  <div className="mb-2 flex size-10 items-center justify-center rounded-xl bg-linear-to-br from-primary/15 to-primary/5 text-primary">
-                    <feature.icon className="size-5" />
+                  <div className="mb-3 flex size-11 items-center justify-center rounded-xl bg-primary/8 ring-1 ring-primary/10 transition-colors duration-300 group-hover:bg-primary/12">
+                    <feature.icon className="size-5 text-primary" />
                   </div>
-                  <CardTitle className="font-display">{feature.title}</CardTitle>
+                  <CardTitle className="font-display text-lg">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-sm leading-relaxed">
@@ -120,24 +149,28 @@ export default function LandingPage() {
 
       {/* How It Works */}
       <section className="relative border-b">
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_50%_80%_at_50%_50%,oklch(0.50_0.13_175/0.03),transparent)] dark:bg-[radial-gradient(ellipse_50%_80%_at_50%_50%,oklch(0.68_0.14_175/0.02),transparent)]" />
         <div className="mx-auto max-w-4xl px-6 py-24">
-          <div className="mb-14 text-center">
+          <div className="mb-16 text-center">
+            <p className="mb-3 text-xs font-semibold tracking-widest text-primary uppercase">How it works</p>
             <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-              How it works
+              Up and running in minutes
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-              Get up and running in minutes — no complex setup required.
+              No complex setup required. Three simple steps to secure your team&apos;s configuration.
             </p>
           </div>
 
-          <div className="relative grid gap-8 sm:grid-cols-3">
-            <div className="pointer-events-none absolute top-8 right-[17%] left-[17%] hidden h-px bg-linear-to-r from-transparent via-border to-transparent sm:block" />
-            {steps.map((step) => (
-              <div key={step.number} className="relative text-center">
-                <div className="mb-4 font-display text-5xl font-black text-primary/15">
-                  {step.number}
+          <div className="relative grid gap-10 sm:grid-cols-3 sm:gap-8">
+            {/* Connecting line */}
+            <div className="pointer-events-none absolute top-9 right-[17%] left-[17%] hidden h-px bg-linear-to-r from-border via-primary/20 to-border sm:block" />
+            {steps.map((step, i) => (
+              <div key={step.number} className={cn("animate-fade-in-up relative text-center", i === 0 && "delay-100", i === 1 && "delay-200", i === 2 && "delay-300")}>
+                <div className="relative mx-auto mb-5 flex size-[4.5rem] items-center justify-center">
+                  <div className="absolute inset-0 rounded-2xl bg-primary/6 ring-1 ring-primary/10" />
+                  <span className="font-display text-2xl font-bold text-primary">{step.number}</span>
                 </div>
-                <h3 className="mb-2 font-display text-lg font-bold">{step.title}</h3>
+                <h3 className="mb-2 font-display text-base font-semibold">{step.title}</h3>
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {step.description}
                 </p>
@@ -149,24 +182,24 @@ export default function LandingPage() {
 
       {/* Final CTA */}
       <section className="relative">
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_110%,oklch(0.55_0.15_195/0.06),transparent)] dark:bg-[radial-gradient(ellipse_60%_50%_at_50%_110%,oklch(0.55_0.15_195/0.04),transparent)]" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_100%,oklch(0.50_0.13_175/0.05),transparent)] dark:bg-[radial-gradient(ellipse_60%_50%_at_50%_100%,oklch(0.68_0.14_175/0.03),transparent)]" />
         <div className="mx-auto max-w-4xl px-6 py-24 text-center">
-          <div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-2xl bg-primary/10">
+          <div className="animate-scale-in mx-auto mb-6 flex size-14 items-center justify-center rounded-2xl bg-primary/8 ring-1 ring-primary/10">
             <CheckCircle2 className="size-7 text-primary" />
           </div>
-          <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="animate-fade-in-up delay-100 font-display text-3xl font-bold tracking-tight sm:text-4xl">
             Ready to secure your team&apos;s config?
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+          <p className="animate-fade-in-up delay-200 mx-auto mt-4 max-w-xl text-muted-foreground">
             Start managing secrets and configuration values with confidence.
             Free to get started, no credit card required.
           </p>
-          <div className="mt-8">
+          <div className="animate-fade-in-up delay-300 mt-8">
             <Link
               href="/register"
-              className={cn(buttonVariants({ size: "lg" }), "gap-2 shadow-md shadow-primary/20")}
+              className={cn(buttonVariants({ size: "lg" }), "gap-2 px-6 shadow-lg shadow-primary/15 transition-shadow hover:shadow-xl hover:shadow-primary/20")}
             >
-              Get Started
+              Get Started Free
               <ArrowRight className="size-4" />
             </Link>
           </div>

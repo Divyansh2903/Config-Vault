@@ -20,12 +20,15 @@ export default async function DashboardLayout({
         }}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-14 items-center justify-end border-b px-6">
+        <header className="flex h-14 items-center justify-end border-b border-border/60 px-6">
           <ThemeToggle />
         </header>
-        <main className="relative flex-1 overflow-y-auto p-6">
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(oklch(0.55_0.15_195/0.03)_1px,transparent_1px)] bg-size-[24px_24px] dark:bg-[radial-gradient(oklch(0.55_0.15_195/0.02)_1px,transparent_1px)]" />
-          {children}
+        <main className="relative flex-1 overflow-y-auto">
+          {/* Subtle dot grid background */}
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(oklch(0.50_0.13_175/0.025)_1px,transparent_1px)] bg-size-[28px_28px] dark:bg-[radial-gradient(oklch(0.68_0.14_175/0.015)_1px,transparent_1px)]" />
+          <div className="mx-auto max-w-7xl p-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>
