@@ -4,13 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Shield,
   LayoutDashboard,
   FolderKanban,
   LogOut,
   Menu,
   User,
 } from "lucide-react";
+import { AppLogo } from "@/components/ui/app-logo";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -56,9 +56,7 @@ function SidebarContent({ user, pathname, onSignOut }: {
     <div className="flex h-full flex-col">
       {/* Brand */}
       <div className="flex h-16 items-center gap-2.5 px-5">
-        <div className="flex size-7 items-center justify-center rounded-lg bg-primary shadow-sm">
-          <Shield className="size-3.5 text-primary-foreground" />
-        </div>
+        <AppLogo size="sm" />
         <span className="font-display text-lg font-bold tracking-tight">ConfigVault</span>
       </div>
       <Separator className="opacity-60" />
@@ -147,7 +145,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden h-screen w-64 shrink-0 border-r border-border/60 bg-card md:block">
+      <aside className="hidden h-screen w-64 shrink-0 border-r border-border/70 bg-card md:block dark:border-border/60">
         <SidebarContent
           user={user}
           pathname={pathname}

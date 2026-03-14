@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Shield, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
+import { AppLogo } from "@/components/ui/app-logo";
 
 export default function AuthLayout({
   children,
@@ -9,11 +10,9 @@ export default function AuthLayout({
   return (
     <div className="relative flex min-h-svh">
       {/* Decorative side panel — visible on larger screens */}
-      <div className="hidden w-[45%] flex-col justify-between bg-linear-to-br from-primary/[0.06] via-primary/[0.03] to-transparent p-10 lg:flex">
+      <div className="hidden w-[45%] flex-col justify-between bg-linear-to-br from-primary/[0.10] via-primary/[0.05] to-transparent p-10 dark:from-primary/[0.06] dark:via-primary/[0.03] lg:flex">
         <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary shadow-sm">
-            <Shield className="size-4 text-primary-foreground" />
-          </div>
+          <AppLogo size="md" />
           <span className="font-display text-lg font-bold tracking-tight">ConfigVault</span>
         </Link>
 
@@ -51,14 +50,12 @@ export default function AuthLayout({
       {/* Form side */}
       <div className="relative flex flex-1 flex-col items-center justify-center p-6">
         {/* Background effects */}
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_40%_at_50%_-10%,oklch(0.50_0.13_175/0.05),transparent)] dark:bg-[radial-gradient(ellipse_60%_40%_at_50%_-10%,oklch(0.68_0.14_175/0.03),transparent)]" />
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(oklch(0.50_0.13_175/0.03)_1px,transparent_1px)] bg-size-[32px_32px] dark:bg-[radial-gradient(oklch(0.68_0.14_175/0.02)_1px,transparent_1px)]" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_40%_at_50%_-10%,oklch(0.50_0.13_175/0.08),transparent)] dark:bg-[radial-gradient(ellipse_60%_40%_at_50%_-10%,oklch(0.68_0.14_175/0.03),transparent)]" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(oklch(0.50_0.13_175/0.05)_1px,transparent_1px)] bg-size-[32px_32px] dark:bg-[radial-gradient(oklch(0.68_0.14_175/0.02)_1px,transparent_1px)]" />
 
         {/* Mobile-only logo */}
         <Link href="/" className="animate-fade-in mb-8 flex items-center gap-2.5 transition-opacity hover:opacity-80 lg:hidden">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary shadow-md shadow-primary/15">
-            <Shield className="size-4 text-primary-foreground" />
-          </div>
+          <AppLogo size="md" />
           <span className="font-display text-xl font-bold tracking-tight">ConfigVault</span>
         </Link>
 

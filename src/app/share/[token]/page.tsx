@@ -3,7 +3,8 @@ import { decrypt } from "@/lib/security/encryption";
 import { createAuditLog, AUDIT_ACTIONS } from "@/lib/audit/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CopyShareValue } from "./copy-button";
-import { XCircle, Clock, Eye, Shield } from "lucide-react";
+import { XCircle, Clock, Eye } from "lucide-react";
+import { AppLogo } from "@/components/ui/app-logo";
 import { formatDistanceToNow } from "date-fns";
 
 export const dynamic = "force-dynamic";
@@ -86,11 +87,9 @@ export default async function SharePage({ params }: SharePageProps) {
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-background px-4">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(oklch(0.55_0.15_195/0.05)_1px,transparent_1px)] bg-size-[32px_32px] dark:bg-[radial-gradient(oklch(0.55_0.15_195/0.03)_1px,transparent_1px)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(oklch(0.55_0.15_195/0.07)_1px,transparent_1px)] bg-size-[32px_32px] dark:bg-[radial-gradient(oklch(0.55_0.15_195/0.03)_1px,transparent_1px)]" />
       <div className="mb-8 flex items-center gap-2">
-        <div className="flex size-9 items-center justify-center rounded-xl bg-linear-to-br from-primary to-primary/80 shadow-md shadow-primary/20">
-          <Shield className="size-5 text-primary-foreground" />
-        </div>
+        <AppLogo size="lg" />
         <span className="font-display text-2xl font-bold tracking-tight">ConfigVault</span>
       </div>
 

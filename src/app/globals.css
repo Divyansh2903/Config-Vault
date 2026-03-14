@@ -60,12 +60,12 @@
   --secondary: oklch(0.955 0.008 210);
   --secondary-foreground: oklch(0.25 0.015 225);
   --muted: oklch(0.955 0.008 210);
-  --muted-foreground: oklch(0.48 0.012 225);
+  --muted-foreground: oklch(0.42 0.014 225);
   --accent: oklch(0.945 0.012 175);
   --accent-foreground: oklch(0.25 0.015 225);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.905 0.006 210);
-  --input: oklch(0.905 0.006 210);
+  --border: oklch(0.885 0.008 210);
+  --input: oklch(0.885 0.008 210);
   --ring: oklch(0.50 0.10 175);
   --chart-1: oklch(0.50 0.13 175);
   --chart-2: oklch(0.60 0.11 160);
@@ -79,7 +79,7 @@
   --sidebar-primary-foreground: oklch(0.99 0.002 175);
   --sidebar-accent: oklch(0.945 0.012 175);
   --sidebar-accent-foreground: oklch(0.25 0.015 225);
-  --sidebar-border: oklch(0.905 0.006 210);
+  --sidebar-border: oklch(0.885 0.008 210);
   --sidebar-ring: oklch(0.50 0.10 175);
 }
 
@@ -203,6 +203,41 @@
   50% { transform: translateY(-6px); }
 }
 
+/* --- Landing page hero animations --- */
+
+@keyframes grid-drift {
+  0% { background-position: 0 0; }
+  100% { background-position: 5rem 5rem; }
+}
+
+@keyframes orb-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, 40px) scale(1.1); }
+  66% { transform: translate(-30px, 60px) scale(0.95); }
+}
+
+@keyframes orb-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-50px, 30px) scale(0.9); }
+  66% { transform: translate(40px, -40px) scale(1.05); }
+}
+
+@keyframes orb-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.08); }
+  66% { transform: translate(-40px, -20px) scale(0.92); }
+}
+
+@keyframes text-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes line-pulse {
+  0% { left: -33%; }
+  100% { left: 100%; }
+}
+
 @utility animate-fade-in-up {
   animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -221,6 +256,30 @@
 
 @utility animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+@utility animate-grid-drift {
+  animation: grid-drift 40s linear infinite;
+}
+
+@utility animate-orb-1 {
+  animation: orb-drift-1 20s ease-in-out infinite;
+}
+
+@utility animate-orb-2 {
+  animation: orb-drift-2 25s ease-in-out infinite;
+}
+
+@utility animate-orb-3 {
+  animation: orb-drift-3 22s ease-in-out infinite;
+}
+
+@utility animate-text-shimmer {
+  animation: text-shimmer 4s ease-in-out infinite;
+}
+
+@utility animate-line-pulse {
+  animation: line-pulse 3s ease-in-out infinite;
 }
 
 @utility delay-100 {
