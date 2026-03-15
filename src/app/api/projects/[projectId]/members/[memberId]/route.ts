@@ -85,7 +85,7 @@ export async function PATCH(
       },
     });
 
-    revalidateTag("project-members");
+    revalidateTag("project-members", "max");
 
     return NextResponse.json(updated);
   } catch (error) {
@@ -144,7 +144,7 @@ export async function DELETE(
       metadata: { email: targetMember.user.email },
     });
 
-    revalidateTag("project-members");
+    revalidateTag("project-members", "max");
 
     return NextResponse.json({ message: "Member removed" }, { status: 200 });
   } catch (error) {

@@ -14540,3 +14540,44 @@
 {"timestamp":"2026-03-15T21:00:05.678Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
 {"timestamp":"2026-03-15T21:00:06.181Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
 {"timestamp":"2026-03-15T21:00:06.683Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:07.183Z","level":"info","message":"checkPortListening tcp failed, trying http fallback: 3000 localhost"}
+{"timestamp":"2026-03-15T21:00:07.185Z","level":"error","message":"checkPortListening http check failed: http://localhost:3000/ TypeError: fetch failed"}
+{"timestamp":"2026-03-15T21:00:07.185Z","level":"error","message":"checkPortListening failed (tcp + http): 3000 localhost"}
+{"timestamp":"2026-03-15T21:00:11.145Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:11.648Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:12.150Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:12.653Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:13.155Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:13.658Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:14.160Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:14.663Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:15.166Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:15.668Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:16.170Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:16.673Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:17.174Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:17.677Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:18.180Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:18.682Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:19.183Z","level":"info","message":"checkPortListening tcp failed, trying http fallback: 3000 localhost"}
+{"timestamp":"2026-03-15T21:00:19.185Z","level":"error","message":"checkPortListening http check failed: http://localhost:3000/ TypeError: fetch failed"}
+{"timestamp":"2026-03-15T21:00:19.185Z","level":"error","message":"checkPortListening failed (tcp + http): 3000 localhost"}
+{"timestamp":"2026-03-15T21:00:23.145Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:23.647Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:24.149Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:24.652Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:25.154Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:25.657Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:26.159Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:26.661Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:27.163Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:27.665Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:28.167Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:28.670Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:29.172Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:29.673Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:30.175Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:30.677Z","level":"error","message":"checkPortListening tcp error: 3000 localhost\nAggregateError"}
+{"timestamp":"2026-03-15T21:00:31.178Z","level":"info","message":"checkPortListening tcp failed, trying http fallback: 3000 localhost"}
+{"timestamp":"2026-03-15T21:00:31.180Z","level":"error","message":"checkPortListening failed (tcp + http): 3000 localhost"}
+{"timestamp":"2026-03-15T21:00:31.180Z","level":"error","message":"checkPortListening http check failed: http://localhost:3000/ TypeError: fetch failed"}
