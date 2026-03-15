@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getAppUrl } from "@/lib/utils";
 
 interface ShareSecretDialogProps {
   open: boolean;
@@ -107,7 +108,7 @@ export function ShareSecretDialog({
 
   function getFullUrl() {
     if (!result) return "";
-    return `${window.location.origin}${result.url}`;
+    return `${getAppUrl()}${result.url}`;
   }
 
   async function handleCopy() {

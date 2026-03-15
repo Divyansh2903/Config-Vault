@@ -7,6 +7,7 @@ import { z } from "zod/v4";
 import { toast } from "sonner";
 import { Copy, Check, UserPlus } from "lucide-react";
 import { inviteMemberSchema } from "@/lib/validations/schemas";
+import { getAppUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,9 +51,7 @@ export function InviteMemberDialog({
     },
   });
 
-  const registerUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/register`
-    : "/register";
+  const registerUrl = `${getAppUrl()}/register`;
 
   function handleClose(isOpen: boolean) {
     if (!isOpen) {

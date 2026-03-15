@@ -5,6 +5,14 @@ export const projectSchema = z.object({
   description: z.string().max(500).optional(),
 });
 
+export const createProjectSchema = z.object({
+  name: z.string().min(1, "Project name is required").max(100),
+  description: z.string().max(500).optional(),
+  envContent: z.string().optional(),
+  targetEnvironment: z.enum(["development", "staging", "production"]).optional(),
+  treatAsSecrets: z.boolean().optional(),
+});
+
 export const environmentSchema = z.object({
   name: z.string().min(1, "Environment name is required").max(50),
   slug: z

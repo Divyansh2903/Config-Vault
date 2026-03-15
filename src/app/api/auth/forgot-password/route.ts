@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { forgotPasswordSchema } from "@/lib/validations/schemas";
 import { sendPasswordResetEmail } from "@/lib/email/resend";
+import { getAppUrl } from "@/lib/utils";
 
 const RESET_TOKEN_TTL_MINUTES = 15;
 
@@ -44,9 +45,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Build the reset URL — use env var to prevent origin header spoofing
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? request.nextUrl.origin;
-    const resetUrl = `${baseUrl}/reset-password?token=${token}`;
+    // Build the reset URL
+    const resetUrl = `${getAppUrl()}/reset-password?token=${token}`;
 
     await sendPasswordResetEmail(email, resetUrl);
 
