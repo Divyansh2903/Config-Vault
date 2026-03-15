@@ -1,0 +1,19 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "backendAuthType": "public",
+  "executionArgs": {
+    "projectName": "my-app",
+    "projectPath": "/Users/divyanshsingh/Developer/testsprite_hackathon_2/my-app",
+    "testIds": [],
+    "additionalInstruction": "For POST /api/auth/register always include fullName, email, and password in the request body. Assert success on status 200 and response { ok: true }, not 201. For any test that needs a logged-in user, first register a new user with fullName (e.g. \"Test User\") then login with that user.",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-tNJmW1slq7_EsgA8Q__58P1HnY7HoIcgiGsmf4J3bAYcAI_Ai6SWdB9DqnUUTFdIpRC3Y-loIE3yIUrwSRilgqHjIk1VnBdDi5WUZpKykxlX5N43Bm2z7BUtTVqM1APuw3M"
+    }
+  },
+  "serverPort": 54571,
+  "proxy": "http://021fb337-91b4-480a-a52f-e9278f535126:J4fVQvVURDnHBesjIKQL7h7W2BhuxwO9@tun.testsprite.com:8080"
+}

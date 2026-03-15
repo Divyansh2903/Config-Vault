@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TC001",
+    "title": "postapiauthloginwithvalidcredentials",
+    "description": "Test the POST /api/auth/login endpoint with valid email and password to ensure successful login returns status 200 with ok true and sets session cookie."
+  },
+  {
+    "id": "TC002",
+    "title": "postapiauthregisterwithvaliddata",
+    "description": "Test the POST /api/auth/register endpoint with valid email and password to ensure new user account creation returns status 201 with user and session data."
+  },
+  {
+    "id": "TC003",
+    "title": "postapiauthlogoutwithvalidsession",
+    "description": "Test the POST /api/auth/logout endpoint with a valid session cookie to ensure the session is ended and returns status 200 ok."
+  },
+  {
+    "id": "TC004",
+    "title": "getapiauthmewithvalidsession",
+    "description": "Test the GET /api/auth/me endpoint with a valid session cookie to retrieve the current user profile and receive status 200 with profile data."
+  },
+  {
+    "id": "TC005",
+    "title": "postapiauthforgotpasswordwithvalidemail",
+    "description": "Test the POST /api/auth/forgot-password endpoint with a registered email to request a password reset email and receive status 200 confirmation."
+  },
+  {
+    "id": "TC006",
+    "title": "postapiauthresetpasswordwithvalidtoken",
+    "description": "Test the POST /api/auth/reset-password endpoint with a valid reset token and new password to set a new password and receive status 200 ok."
+  },
+  {
+    "id": "TC007",
+    "title": "postapiprojectswithvalidsessionanddata",
+    "description": "Test the POST /api/projects endpoint with a valid session cookie and valid project data to create a new project and receive status 201 with project details."
+  },
+  {
+    "id": "TC008",
+    "title": "getapiprojectsprojectidwithvalidsession",
+    "description": "Test the GET /api/projects/[projectId] endpoint with a valid session cookie and membership to retrieve project details including environments and receive status 200."
+  },
+  {
+    "id": "TC009",
+    "title": "postapiprojectsprojectidmemberswithvalidsessionanddata",
+    "description": "Test the POST /api/projects/[projectId]/members endpoint with a valid session cookie and valid member invitation data to add a member and receive status 201 with member details."
+  },
+  {
+    "id": "TC010",
+    "title": "getapiprojectsenvironmentsenvidentrieswithvalidsession",
+    "description": "Test the GET /api/environments/[envId]/entries endpoint with a valid session cookie to list config entries for the environment and receive status 200 with config entries array."
+  }
+]

@@ -6,7 +6,7 @@ Keep your environment variables safe and synced across your team. Start a projec
 
 ## Demo
 
-[![Watch the demo](https://img.youtube.com/vi/REPLACE_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=REPLACE_VIDEO_ID)
+[![Watch the demo](https://img.youtube.com/vi/T2mCSG4M2vs/maxresdefault.jpg)](https://www.youtube.com/watch?v=T2mCSG4M2vs)
 
 ## What is ConfigVault?
 

@@ -1,0 +1,1587 @@
+[
+  {
+    "id": "TC001",
+    "title": "Successful login redirects to dashboard",
+    "description": "Verifies that a user can sign in with valid email/password and is redirected to the dashboard.",
+    "category": "User Login",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Sign in\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the sign in button to submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Dashboard\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Invalid password shows error message",
+    "description": "Verifies that login fails with an incorrect password and an invalid-credentials error is shown.",
+    "category": "User Login",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Sign in\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"user_does_not_matter@example.com\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"wrong-password-123\" into the password input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the sign in button to submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"invalid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Missing email prevents login submission",
+    "description": "Verifies that attempting to sign in without an email shows a validation message and does not navigate away.",
+    "category": "User Login",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Sign in\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the sign in button to submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Missing password prevents login submission",
+    "description": "Verifies that attempting to sign in without a password shows a validation message and does not navigate away.",
+    "category": "User Login",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Sign in\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the sign in button to submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"password\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Pressing Enter in password field submits login",
+    "description": "Verifies that users can submit the login form via the Enter key and reach the dashboard.",
+    "category": "User Login",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password input field"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Dashboard\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Forgot Password - Request reset link with a valid registered email shows confirmation",
+    "description": "Verifies a user can submit the forgot-password form with a valid email and sees a confirmation message.",
+    "category": "Forgot Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot Password\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Send reset link\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"If an account exists\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"reset link\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Forgot Password - Invalid email format shows inline validation error",
+    "description": "Verifies the form blocks submission and shows an email validation error when the email format is invalid.",
+    "category": "Forgot Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot Password\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"not-an-email\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Send reset link\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Enter a valid email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"If an account exists\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Forgot Password - Non-registered email still shows generic confirmation (no enumeration)",
+    "description": "Verifies submitting a non-registered email results in a generic confirmation message without indicating account existence.",
+    "category": "Forgot Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot Password\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"nonexistent-user-12345@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Send reset link\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"If an account exists\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Check your email\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Forgot Password - Empty email blocks submission and shows required-field error",
+    "description": "Verifies the email field is required and the user sees a validation message when attempting to submit empty.",
+    "category": "Forgot Password",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot Password\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Send reset link\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Email is required\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"If an account exists\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Forgot Password - Leading/trailing whitespace in email is accepted and still shows confirmation",
+    "description": "Verifies the form handles an email with surrounding whitespace and still shows the generic confirmation.",
+    "category": "Forgot Password",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot Password\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"  {{LOGIN_USER}}  \" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Send reset link\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"If an account exists\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"reset link\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Forgot Password - Navigate to Forgot Password from Login page",
+    "description": "Verifies the user can reach the forgot-password page from the login page via a visible link.",
+    "category": "Forgot Password",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Sign in\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Forgot password\" link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/forgot-password\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot Password\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Reset password successfully redirects to login with success message",
+    "description": "Verifies a user can set a new password and is redirected to the login page with a visible success confirmation.",
+    "category": "Reset Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reset-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Reset\""
+      },
+      {
+        "type": "action",
+        "description": "Type \"NewPass!23456\" into the \"New password\" field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"NewPass!23456\" into the \"Confirm password\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reset password\" (or \"Submit\") button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Password reset\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Mismatched passwords show validation error",
+    "description": "Verifies the reset password form blocks submission and shows an error when password confirmation does not match.",
+    "category": "Reset Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reset-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"New password\" field is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"NewPass!23456\" into the \"New password\" field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"DifferentPass!23456\" into the \"Confirm password\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reset password\" (or \"Submit\") button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"do not match\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/reset-password\""
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Expired or invalid token shows token error on submit",
+    "description": "Verifies the UI shows an invalid/expired token message when the reset token is not accepted.",
+    "category": "Reset Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reset-password"
+      },
+      {
+        "type": "action",
+        "description": "Type \"NewPass!23456\" into the \"New password\" field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"NewPass!23456\" into the \"Confirm password\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reset password\" (or \"Submit\") button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"expired\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/reset-password\""
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Empty submission shows required-field validation",
+    "description": "Verifies the form displays required-field errors when submitting without entering passwords.",
+    "category": "Reset Password",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reset-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Reset password\" (or \"Submit\") button is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reset password\" (or \"Submit\") button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/reset-password\""
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Password policy violation shows inline validation error",
+    "description": "Verifies the UI prevents weak/invalid passwords and shows a visible password rule error message.",
+    "category": "Reset Password",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reset-password"
+      },
+      {
+        "type": "action",
+        "description": "Type \"123\" into the \"New password\" field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"123\" into the \"Confirm password\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reset password\" (or \"Submit\") button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"password\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"too\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/reset-password\""
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Reset password page has a working path back to login",
+    "description": "Verifies users can navigate from reset-password page to the login page using an on-page link.",
+    "category": "Reset Password",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reset-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Back to login\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Back to login\" (or \"Sign in\") link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Sign\""
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Dashboard loads successfully after login",
+    "description": "Verifies an authenticated user can reach the dashboard and see dashboard content.",
+    "category": "Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Dashboard\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Dashboard shows project summaries section",
+    "description": "Verifies the dashboard surfaces a visible project summaries area for the signed-in user.",
+    "category": "Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Projects\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Navigate from Dashboard to Projects using the sidebar",
+    "description": "Verifies the user can navigate to the Projects list from the dashboard via the sidebar navigation.",
+    "category": "Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Projects\" in the sidebar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/projects\""
+      }
+    ]
+  },
+  {
+    "id": "TC021",
+    "title": "Sidebar navigation from Dashboard to Profile works",
+    "description": "Verifies the user can use the sidebar to reach the Profile page from the dashboard context.",
+    "category": "Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Profile\" in the sidebar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/profile\""
+      }
+    ]
+  },
+  {
+    "id": "TC022",
+    "title": "Dashboard sidebar is visible and usable",
+    "description": "Verifies the dashboard layout renders a visible sidebar navigation for authenticated users.",
+    "category": "Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Sidebar\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Projects\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC023",
+    "title": "Projects list page loads and shows the Projects view",
+    "description": "Verifies an authenticated user can open the Projects list page and see the Projects list area rendered.",
+    "category": "Projects List",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Projects\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/projects\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Projects\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC024",
+    "title": "Open a project from the projects list",
+    "description": "Verifies the user can click a project item from the list and is taken to the project overview page.",
+    "category": "Projects List",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Projects\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/projects\""
+      },
+      {
+        "type": "action",
+        "description": "Click the first project item in the projects list"
+      }
+    ]
+  },
+  {
+    "id": "TC025",
+    "title": "Navigate to Create New Project from Projects list CTA",
+    "description": "Verifies the create-new-project call-to-action on the Projects list routes the user to the new project page.",
+    "category": "Projects List",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Projects\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/projects\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create new project\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/projects/new\""
+      }
+    ]
+  },
+  {
+    "id": "TC026",
+    "title": "Create New Project CTA is visible on Projects list page",
+    "description": "Verifies the Projects list page provides a visible quick action to create a new project.",
+    "category": "Projects List",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Projects\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/projects\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Create new project\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC027",
+    "title": "Projects list shows empty-state messaging when no projects are available",
+    "description": "Verifies the Projects list page shows an empty-state prompt when the user has no accessible projects.",
+    "category": "Projects List",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Projects\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/projects\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No projects\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC028",
+    "title": "Create a new project with name only (no .env import)",
+    "description": "Verifies a user can create a project by providing only a project name and is redirected to the new project overview.",
+    "category": "Create Project",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /projects/new"
+      },
+      {
+        "type": "action",
+        "description": "Type \"E2E Project Name Only\" into the project name field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create\" or \"Create project\" button"
+      }
+    ]
+  },
+  {
+    "id": "TC029",
+    "title": "Create a new project with valid .env import pasted",
+    "description": "Verifies a user can create a project and import key-value pairs from pasted .env content without errors.",
+    "category": "Create Project",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /projects/new"
+      },
+      {
+        "type": "action",
+        "description": "Type \"E2E Project With Env Import\" into the project name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"API_URL=https://example.com\\nFEATURE_FLAG=true\\nSECRET_KEY=supersecret\" into the .env content text area"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create\" or \"Create project\" button"
+      }
+    ]
+  },
+  {
+    "id": "TC030",
+    "title": "Project name is required validation",
+    "description": "Verifies submitting the create project form with an empty name shows a required-name validation message and does not proceed.",
+    "category": "Create Project",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /projects/new"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create\" or \"Create project\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"name is required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC031",
+    "title": "Malformed .env content shows parsing/import error",
+    "description": "Verifies submitting malformed .env content surfaces a parsing/import error message and the project is not created.",
+    "category": "Create Project",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /projects/new"
+      },
+      {
+        "type": "action",
+        "description": "Type \"E2E Project Malformed Env\" into the project name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"BAD LINE WITHOUT EQUALS\\nANOTHERBAD==value\\n=novalue\" into the .env content text area"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create\" or \"Create project\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"parsing\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC032",
+    "title": "Whitespace-only project name is rejected",
+    "description": "Verifies a project name containing only spaces is treated as empty and triggers the required-name validation.",
+    "category": "Create Project",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /projects/new"
+      },
+      {
+        "type": "action",
+        "description": "Type \"     \" into the project name field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create\" or \"Create project\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"name is required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC033",
+    "title": "Name is preserved after .env parsing error",
+    "description": "Verifies that when an import error occurs, the entered project name remains visible so the user can correct the .env content without retyping the name.",
+    "category": "Create Project",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /projects/new"
+      },
+      {
+        "type": "action",
+        "description": "Type \"E2E Preserve Name After Error\" into the project name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"NOT_A_PAIR\\nALSO_BAD\" into the .env content text area"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create\" or \"Create project\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"parsing\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"E2E Preserve Name After Error\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC034",
+    "title": "Empty .env content does not block creation",
+    "description": "Verifies leaving the .env content area empty (or untouched) still allows project creation when a valid name is provided.",
+    "category": "Create Project",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /projects/new"
+      },
+      {
+        "type": "action",
+        "description": "Type \"E2E Project Empty Env Textarea\" into the project name field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create\" or \"Create project\" button"
+      }
+    ]
+  },
+  {
+    "id": "TC035",
+    "title": "Create a new config entry and mark it as secret",
+    "description": "Verifies a user can add a new key/value entry and mark it as secret, then see it in the entries list.",
+    "category": "Config Entry Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Projects\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/projects\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Projects\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC036",
+    "title": "View profile page shows current user information",
+    "description": "Verifies that an authenticated user can open the Profile page and see their current profile details.",
+    "category": "Profile",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Profile\" link in the app navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/profile\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Name\" field is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC037",
+    "title": "Update profile name successfully and see confirmation",
+    "description": "Verifies that an authenticated user can change their name and receives a visible success confirmation.",
+    "category": "Profile",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Profile\" link in the app navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/profile\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Updated Test Name\" into the \"Name\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Profile updated\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC038",
+    "title": "Persisted profile name is shown after revisiting Profile page",
+    "description": "Verifies that after saving a new name, the Profile page continues to display the updated value on revisit within the same session.",
+    "category": "Profile",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Profile\" link in the app navigation"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Persisted Name Check\" into the \"Name\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Profile updated\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Dashboard\" link in the app navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Profile\" link in the app navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Persisted Name Check\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC039",
+    "title": "Attempt to save empty name shows validation error",
+    "description": "Verifies that leaving the name blank and saving displays a visible validation error and does not show a success confirmation.",
+    "category": "Profile",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Profile\" link in the app navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/profile\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"\" into the \"Name\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Name\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC040",
+    "title": "Attempt to save overly long name shows validation error",
+    "description": "Verifies that entering an excessively long name and saving displays a visible validation error message.",
+    "category": "Profile",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Profile\" link in the app navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/profile\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\" into the \"Name\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Invalid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC041",
+    "title": "Save action is blocked when required fields are invalid (error remains visible)",
+    "description": "Verifies that when profile input is invalid, saving does not produce a success confirmation and an error remains visible.",
+    "category": "Profile",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Profile\" link in the app navigation"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"\" into the \"Name\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Profile updated\" is visible"
+      }
+    ]
+  }
+]
