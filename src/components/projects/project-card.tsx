@@ -32,7 +32,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <ArrowUpRight className="size-4" />
         </div>
         <CardHeader className="pb-2">
-          <CardTitle className="font-display text-base">{project.name}</CardTitle>
+          <CardTitle className="text-sm font-medium">{project.name}</CardTitle>
           {project.description && (
             <CardDescription className="line-clamp-2 text-[13px]">
               {project.description}

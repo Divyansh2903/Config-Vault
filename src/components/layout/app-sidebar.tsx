@@ -57,7 +57,7 @@ function SidebarContent({ user, pathname, onSignOut }: {
       {/* Brand */}
       <div className="flex h-16 items-center gap-2.5 px-5">
         <AppLogo size="sm" />
-        <span className="font-display text-lg font-bold tracking-tight">ConfigVault</span>
+        <span className="text-lg font-bold tracking-tight">ConfigVault</span>
       </div>
       <Separator className="opacity-60" />
 

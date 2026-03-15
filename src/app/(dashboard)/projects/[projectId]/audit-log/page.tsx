@@ -26,7 +26,7 @@ export default async function AuditLogPage({
   return (
     <div className="space-y-6">
       <div className="animate-fade-in-up">
-        <h1 className="font-display text-2xl font-bold tracking-tight">
+        <h1 className="text-xl font-medium tracking-tight">
           Audit Log
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">

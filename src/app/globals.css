@@ -153,6 +153,10 @@
   font-family: var(--font-display);
 }
 
+@utility font-roboto {
+  font-family: var(--font-roboto);
+}
+
 /* --- Animations --- */
 
 @keyframes fade-in-up {

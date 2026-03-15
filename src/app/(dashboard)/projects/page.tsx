@@ -15,7 +15,7 @@ export default async function ProjectsPage() {
     <div>
       <div className="animate-fade-in-up mb-8 flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight">Projects</h1>
+          <h1 className="text-xl font-medium tracking-tight">Projects</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Manage your configuration across all projects.
           </p>

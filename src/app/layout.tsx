@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
+import { Outfit, Plus_Jakarta_Sans, Geist_Mono, Roboto } from "next/font/google";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,6 +21,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+});
+
 export const metadata: Metadata = {
   title: "ConfigVault",
   description: "Secure Developer Secrets & Config Hub",
@@ -34,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${outfit.variable} ${plusJakarta.variable} ${geistMono.variable} antialiased`}
+        className={`${outfit.variable} ${plusJakarta.variable} ${geistMono.variable} ${roboto.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"

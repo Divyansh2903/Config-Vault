@@ -52,7 +52,10 @@ export async function POST(
 
     if (!invitedUser) {
       return NextResponse.json(
-        { error: "User not found. They must register first." },
+        {
+          error: "not_registered",
+          message: "This person doesn't have a ConfigVault account yet.",
+        },
         { status: 404 },
       );
     }

@@ -51,7 +51,7 @@ export default async function DashboardPage() {
       {/* Welcome header + quick action */}
       <div className="animate-fade-in-up flex items-start justify-between">
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight">
+          <h1 className="text-xl font-medium tracking-tight">
             {getGreeting()}, {profile.fullName}
           </h1>
           <p className="mt-1 text-muted-foreground">
@@ -77,7 +77,7 @@ export default async function DashboardPage() {
               <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{stat.label}</p>
               <stat.icon className={cn("size-4", stat.color)} />
             </div>
-            <p className="mt-2 font-display text-2xl font-bold tabular-nums">{stat.value}</p>
+            <p className="mt-2 text-2xl font-medium tabular-nums">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -85,7 +85,7 @@ export default async function DashboardPage() {
       {/* Recent Projects */}
       <section className="animate-fade-in-up delay-200 space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-lg font-semibold">Recent Projects</h2>
+          <h2 className="text-base font-medium">Recent Projects</h2>
           {projects.length > 0 && (
             <Link
               href="/projects"
@@ -113,7 +113,7 @@ export default async function DashboardPage() {
 
       {/* Recent Activity */}
       <section className="animate-fade-in-up delay-300 space-y-4">
-        <h2 className="font-display text-lg font-semibold">Recent Activity</h2>
+        <h2 className="text-base font-medium">Recent Activity</h2>
         {auditLogs.length === 0 ? (
           <EmptyState
             icon={<Activity className="size-10" />}

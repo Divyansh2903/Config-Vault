@@ -42,7 +42,7 @@ export default async function ProjectOverviewPage({
     <div className="space-y-8">
       {/* Project header */}
       <div className="animate-fade-in-up">
-        <h1 className="font-display text-2xl font-bold tracking-tight">{project.name}</h1>
+        <h1 className="text-xl font-medium tracking-tight">{project.name}</h1>
         {project.description && (
           <p className="mt-1 text-muted-foreground">{project.description}</p>
         )}
@@ -59,7 +59,7 @@ export default async function ProjectOverviewPage({
               <stat.icon className="size-4 text-primary" />
             </div>
             <div>
-              <p className="font-display text-lg font-bold tabular-nums leading-tight">{stat.value}</p>
+              <p className="text-lg font-medium tabular-nums leading-tight">{stat.value}</p>
               <p className="text-[11px] tracking-wide text-muted-foreground">{stat.label}</p>
             </div>
           </div>
@@ -69,7 +69,7 @@ export default async function ProjectOverviewPage({
       {/* Environments */}
       <section className="animate-fade-in-up delay-200">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-display text-lg font-semibold">Environments</h2>
+          <h2 className="text-base font-medium">Environments</h2>
           {isOwner && (
             <Button
               size="sm"
@@ -106,7 +106,7 @@ export default async function ProjectOverviewPage({
 
       {/* Recent Activity */}
       <section className="animate-fade-in-up delay-300">
-        <h2 className="mb-4 font-display text-lg font-semibold">Recent Activity</h2>
+        <h2 className="mb-4 text-base font-medium">Recent Activity</h2>
 
         {project.auditLogs.length === 0 ? (
           <EmptyState

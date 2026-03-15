@@ -56,7 +56,7 @@ export default async function EnvironmentDetailPage({
             {environment.name}
           </span>
         </div>
-        <h1 className="mt-2 font-display text-2xl font-bold tracking-tight">
+        <h1 className="mt-2 text-xl font-medium tracking-tight">
           {environment.name}
         </h1>
       </div>

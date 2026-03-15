@@ -4,6 +4,46 @@ import { prisma } from "@/lib/db/prisma";
 import { projectSchema } from "@/lib/validations/schemas";
 import { createAuditLog, AUDIT_ACTIONS } from "@/lib/audit/logger";
 
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ projectId: string }> },
+) {
+  try {
+    const user = await getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { projectId } = await params;
+
+    const member = await prisma.projectMember.findUnique({
+      where: {
+        projectId_userId: { projectId, userId: user.profile.id },
+      },
+    });
+
+    if (!member) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+    });
+
+    if (!project) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(project);
+  } catch (error) {
+    console.error("Failed to fetch project:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}
+
 async function requireOwner(projectId: string, userId: string) {
   const member = await prisma.projectMember.findUnique({
     where: {

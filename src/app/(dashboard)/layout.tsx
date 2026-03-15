@@ -12,7 +12,7 @@ export default async function DashboardLayout({
   if (!data) redirect("/login");
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden font-roboto text-sm">
       <AppSidebar
         user={{
           fullName: data.profile.fullName,

@@ -120,7 +120,7 @@ export default function ProjectSettingsPage() {
   return (
     <div className="max-w-2xl space-y-8">
       <div>
-        <h1 className="font-display text-2xl font-bold">Settings</h1>
+        <h1 className="text-xl font-medium">Settings</h1>
         <p className="text-muted-foreground">Manage your project settings</p>
       </div>
 

@@ -59,7 +59,7 @@ export default function NewProjectPage() {
         Back to projects
       </Link>
 
-      <h1 className="animate-fade-in-up delay-100 mb-6 font-display text-2xl font-bold tracking-tight">New Project</h1>
+      <h1 className="animate-fade-in-up delay-100 mb-6 text-xl font-medium tracking-tight">New Project</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">

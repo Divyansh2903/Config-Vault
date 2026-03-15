@@ -53,7 +53,7 @@ export function EnvironmentCard({
         )} />
         <CardHeader className="pl-5">
           <div className="flex items-center justify-between">
-            <CardTitle className="font-display text-base">{environment.name}</CardTitle>
+            <CardTitle className="text-sm font-medium">{environment.name}</CardTitle>
             <Badge className={cn(colorClass, "transition-transform duration-200 group-hover:scale-105")}>
               {environment.slug}
             </Badge>
