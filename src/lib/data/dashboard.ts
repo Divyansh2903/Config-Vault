@@ -34,3 +34,26 @@ export const getDashboardData = unstable_cache(
   },
 );
 
+export async function getPendingInvitations(email: string): Promise<
+  {
+    id: string;
+    token: string;
+    role: string;
+    project: { name: string };
+    inviter: { fullName: string };
+  }[]
+> {
+  return prisma.projectInvitation.findMany({
+    where: {
+      email,
+      status: "PENDING",
+      expiresAt: { gt: new Date() },
+    },
+    include: {
+      project: { select: { name: true } },
+      inviter: { select: { fullName: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+

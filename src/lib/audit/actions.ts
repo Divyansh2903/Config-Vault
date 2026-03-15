@@ -18,6 +18,9 @@ export const AUDIT_ACTIONS = {
   SHARE_LINK_VIEWED: "share_link.viewed",
   CONFIG_IMPORTED: "config.imported",
   CONFIG_EXPORTED: "config.exported",
+  INVITATION_SENT: "invitation.sent",
+  INVITATION_ACCEPTED: "invitation.accepted",
+  INVITATION_DECLINED: "invitation.declined",
 } as const;
 
 export function humanizeAction(action: string): string {
@@ -41,6 +44,9 @@ export function humanizeAction(action: string): string {
     "share_link.viewed": "Viewed shared secret",
     "config.imported": "Imported config entries",
     "config.exported": "Exported config entries",
+    "invitation.sent": "Sent project invitation",
+    "invitation.accepted": "Accepted project invitation",
+    "invitation.declined": "Declined project invitation",
   };
   return map[action] ?? action;
 }

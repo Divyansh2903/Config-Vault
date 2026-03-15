@@ -30,6 +30,17 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: "ConfigVault",
   description: "Secure Developer Secrets & Config Hub",
+  openGraph: {
+    title: "ConfigVault",
+    description: "Manage secrets & config across environments. Secure sharing, audit logs, and access control for your team.",
+    siteName: "ConfigVault",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ConfigVault",
+    description: "Manage secrets & config across environments. Secure sharing, audit logs, and access control for your team.",
+  },
 };
 
 export default function RootLayout({

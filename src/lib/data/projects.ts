@@ -110,6 +110,7 @@ export const getProjectMembers = unstable_cache(
   ["project-members"],
   {
     revalidate: 60,
+    tags: ["project-members"],
   },
 );
 

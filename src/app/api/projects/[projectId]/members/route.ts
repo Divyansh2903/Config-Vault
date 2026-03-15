@@ -1,8 +1,13 @@
+import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { getUser } from "@/lib/auth/get-user";
 import { prisma } from "@/lib/db/prisma";
 import { inviteMemberSchema } from "@/lib/validations/schemas";
 import { createAuditLog, AUDIT_ACTIONS } from "@/lib/audit/logger";
+import { sendProjectInvitationEmail } from "@/lib/email/resend";
+import { getAppUrl } from "@/lib/utils";
+
+const INVITATION_TTL_DAYS = 7;
 
 async function requireOwner(projectId: string, userId: string) {
   const member = await prisma.projectMember.findUnique({
@@ -46,51 +51,92 @@ export async function POST(
 
     const { email, role } = parsed.data;
 
-    const invitedUser = await prisma.profile.findUnique({
+    // Check if user is already a member
+    const existingProfile = await prisma.profile.findUnique({
       where: { email },
     });
 
-    if (!invitedUser) {
-      return NextResponse.json(
-        {
-          error: "not_registered",
-          message: "This person doesn't have a ConfigVault account yet.",
+    if (existingProfile) {
+      const existingMember = await prisma.projectMember.findUnique({
+        where: {
+          projectId_userId: { projectId, userId: existingProfile.id },
         },
-        { status: 404 },
-      );
+      });
+
+      if (existingMember) {
+        return NextResponse.json(
+          { error: "User is already a member of this project" },
+          { status: 409 },
+        );
+      }
     }
 
-    const existingMember = await prisma.projectMember.findUnique({
+    // Check for an existing pending invitation for this email + project
+    const existingInvitation = await prisma.projectInvitation.findFirst({
       where: {
-        projectId_userId: { projectId, userId: invitedUser.id },
+        projectId,
+        email,
+        status: "PENDING",
+        expiresAt: { gt: new Date() },
       },
     });
 
-    if (existingMember) {
+    if (existingInvitation) {
       return NextResponse.json(
-        { error: "User is already a member of this project" },
+        { error: "An invitation has already been sent to this email" },
         { status: 409 },
       );
     }
 
-    const member = await prisma.projectMember.create({
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+      select: { name: true },
+    });
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiresAt = new Date(
+      Date.now() + INVITATION_TTL_DAYS * 24 * 60 * 60 * 1000,
+    );
+
+    const invitation = await prisma.projectInvitation.create({
       data: {
         projectId,
-        userId: invitedUser.id,
+        email,
         role,
+        token,
+        invitedBy: user.profile.id,
+        expiresAt,
       },
     });
 
     await createAuditLog({
       projectId,
       actorId: user.profile.id,
-      action: AUDIT_ACTIONS.MEMBER_INVITED,
-      entityType: "member",
-      entityId: member.id,
+      action: AUDIT_ACTIONS.INVITATION_SENT,
+      entityType: "invitation",
+      entityId: invitation.id,
       metadata: { email, role },
     });
 
-    return NextResponse.json(member, { status: 201 });
+    // Send invitation email
+    const inviteUrl = `${getAppUrl()}/invitations/${token}`;
+    try {
+      await sendProjectInvitationEmail(
+        email,
+        user.profile.fullName,
+        project?.name ?? "a project",
+        role,
+        inviteUrl,
+      );
+    } catch {
+      // Email failed but invitation was created — don't block
+      console.error("Invitation created but email delivery failed");
+    }
+
+    return NextResponse.json(
+      { message: "Invitation sent", id: invitation.id },
+      { status: 201 },
+    );
   } catch (error) {
     console.error("Failed to invite member:", error);
     return NextResponse.json(

@@ -32,13 +32,14 @@ model Profile {
   email     String   @unique
   createdAt DateTime @default(now()) @map("created_at")
 
-  projects       Project[]
-  projectMembers ProjectMember[]
-  auditLogs      AuditLog[]      @relation("AuditActor")
-  createdEntries ConfigEntry[]   @relation("EntryCreator")
-  updatedEntries ConfigEntry[]   @relation("EntryUpdater")
-  shareLinks     ShareLink[]
-  userAuth       UserAuth?       @relation(fields: [id], references: [id])
+  projects          Project[]
+  projectMembers    ProjectMember[]
+  auditLogs         AuditLog[]           @relation("AuditActor")
+  createdEntries    ConfigEntry[]        @relation("EntryCreator")
+  updatedEntries    ConfigEntry[]        @relation("EntryUpdater")
+  shareLinks        ShareLink[]
+  sentInvitations   ProjectInvitation[]
+  userAuth          UserAuth?            @relation(fields: [id], references: [id])
 
   @@map("profiles")
 }
@@ -50,10 +51,11 @@ model Project {
   ownerId     String   @map("owner_id") @db.Uuid
   createdAt   DateTime @default(now()) @map("created_at")
 
-  owner        Profile         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner        Profile              @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   members      ProjectMember[]
   environments Environment[]
   auditLogs    AuditLog[]
+  invitations  ProjectInvitation[]
 
   @@map("projects")
 }
@@ -144,6 +146,31 @@ model ShareLink {
   creator     Profile     @relation(fields: [createdBy], references: [id])
 
   @@map("share_links")
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
+
+model ProjectInvitation {
+  id        String           @id @default(uuid()) @db.Uuid
+  projectId String           @map("project_id") @db.Uuid
+  email     String
+  role      MemberRole       @default(VIEWER)
+  token     String           @unique
+  status    InvitationStatus @default(PENDING)
+  invitedBy String           @map("invited_by") @db.Uuid
+  expiresAt DateTime         @map("expires_at")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  inviter Profile @relation(fields: [invitedBy], references: [id])
+
+  @@index([email, status])
+  @@map("project_invitations")
 }
 
 model Session {

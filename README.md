@@ -1,13 +1,11 @@
 # ConfigVault
 
-Secure, team-oriented configuration & secrets management. Create a project. Vault handles the rest.
+Keep your environment variables safe and synced across your team. Start a project and let Vault take care of everything else.
 
-<!-- TODO: Replace with actual screenshot -->
-![ConfigVault Dashboard](placeholder-screenshot.png)
+![ConfigVault](src/assets/ConfigVault.PNG)
 
 ## Demo
 
-<!-- TODO: Replace with actual YouTube video ID -->
 [![Watch the demo](https://img.youtube.com/vi/REPLACE_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=REPLACE_VIDEO_ID)
 
 ## What is ConfigVault?
@@ -56,51 +54,53 @@ Built as a solo project for the [TestSprite Hackathon](https://www.testsprite.co
 ## Project Structure
 
 ```
-my-app/
-├── prisma/
-│   ├── schema.prisma             # Database schema (10 models)
-│   └── seed.ts                   # Seed script with sample data
-├── src/
+configvault/
+├── src/                           # All application code
 │   ├── app/
-│   │   ├── (auth)/               # Login, register, forgot/reset password
-│   │   ├── (dashboard)/          # Protected dashboard pages
-│   │   │   ├── dashboard/        # Home overview
-│   │   │   ├── projects/         # Project list, detail, settings
+│   │   ├── (auth)/                # Login, register, forgot/reset password
+│   │   ├── (dashboard)/           # Protected dashboard pages
+│   │   │   ├── dashboard/         # Home overview
+│   │   │   ├── projects/          # Project list, detail, settings
 │   │   │   │   └── [projectId]/
 │   │   │   │       ├── environments/[envId]/  # Config entry management
 │   │   │   │       ├── members/               # Team member management
 │   │   │   │       ├── audit-log/             # Audit log viewer
 │   │   │   │       └── settings/              # Project settings
-│   │   │   └── profile/          # User profile
-│   │   ├── (marketing)/          # Public landing page
-│   │   ├── api/                  # API routes (auth, projects, entries, share)
-│   │   └── share/[token]/        # Public share-link page
+│   │   │   └── profile/           # User profile
+│   │   ├── (marketing)/           # Public landing page
+│   │   ├── api/                   # API routes (auth, projects, entries, share)
+│   │   ├── invitations/[token]/   # Project invitation accept/decline page
+│   │   └── share/[token]/         # Public share-link page
 │   ├── components/
-│   │   ├── audit/                # Audit log components
-│   │   ├── config/               # Config table, dialogs, badges
-│   │   ├── landing/              # Marketing page components
-│   │   ├── layout/               # Sidebar, theme toggle, empty states
-│   │   ├── members/              # Member management & invites
-│   │   ├── projects/             # Project & environment cards
-│   │   └── ui/                   # shadcn/ui primitives
-│   ├── hooks/                    # Custom React hooks
+│   │   ├── audit/                 # Audit log components
+│   │   ├── config/                # Config table, dialogs, badges
+│   │   ├── landing/               # Marketing page components
+│   │   ├── layout/                # Sidebar, theme toggle, empty states
+│   │   ├── members/               # Member management & invites
+│   │   ├── projects/              # Project & environment cards
+│   │   └── ui/                    # shadcn/ui primitives
+│   ├── hooks/                     # Custom React hooks
 │   └── lib/
-│       ├── auth/                 # Session management, password hashing
-│       ├── audit/                # Audit logging utilities
-│       ├── db/                   # Prisma client singleton
-│       ├── email/                # Resend email integration
-│       ├── permissions/          # RBAC permission checks
-│       ├── security/             # AES-256-GCM encryption
-│       └── validations/          # Zod schemas
-├── middleware.ts                 # Route protection & auth redirects
-└── prisma.config.ts              # Prisma 7 config
+│       ├── auth/                  # Session management, password hashing
+│       ├── audit/                 # Audit logging utilities
+│       ├── db/                    # Prisma client singleton
+│       ├── email/                 # Resend email integration
+│       ├── permissions/           # RBAC permission checks
+│       ├── security/              # AES-256-GCM encryption
+│       └── validations/           # Zod schemas
+├── testsprite_tests/              # AI-generated tests from TestSprite MCP
+├── prisma/
+│   ├── schema.prisma              # Database schema (10 models)
+│   └── seed.ts                    # Seed script with sample data
+├── middleware.ts                   # Route protection & auth redirects
+├── README.md                      # Project documentation
+├── video.txt                      # Demo video script / app flow
+└── demo.mp4                       # Demo video (optional)
 ```
 
 ## Testing
 
-Test cases are generated using [TestSprite MCP](https://testsprite.com) — an AI testing agent that auto-generates comprehensive test suites. Generated tests cover API endpoint validation, RBAC permission enforcement, encryption workflows, and authentication flows.
-
-<!-- TODO: Add testsprite_tests/ directory path once tests are generated -->
+Test cases are generated using [TestSprite MCP](https://testsprite.com) — an AI testing agent that auto-generates comprehensive test suites. All generated tests live in the `testsprite_tests/` directory and cover API endpoint validation, RBAC permission enforcement, encryption workflows, and authentication flows.
 
 ## Local Setup
 

@@ -14,9 +14,10 @@ import { requireUser } from "@/lib/auth/get-user";
 import { humanizeAction } from "@/lib/audit/logger";
 import { ProjectCard } from "@/components/projects/project-card";
 import { EmptyState } from "@/components/layout/empty-state";
-import { getDashboardData } from "@/lib/data/dashboard";
+import { getDashboardData, getPendingInvitations } from "@/lib/data/dashboard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Mail } from "lucide-react";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -34,7 +35,10 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const { projects, auditLogs } = await getDashboardData(profile.id);
+  const [{ projects, auditLogs }, pendingInvitations] = await Promise.all([
+    getDashboardData(profile.id),
+    getPendingInvitations(profile.email),
+  ]);
 
   const totalEnvs = projects.reduce((sum, p) => sum + p._count.environments, 0);
   const totalMembers = projects.reduce((sum, p) => sum + p._count.members, 0);
@@ -81,6 +85,43 @@ export default async function DashboardPage() {
           </div>
         ))}
       </div>
+
+      {/* Pending Invitations */}
+      {pendingInvitations.length > 0 && (
+        <section className="animate-fade-in-up delay-150 space-y-3">
+          <h2 className="text-base font-medium">Pending Invitations</h2>
+          <div className="space-y-2">
+            {pendingInvitations.map((inv) => (
+              <div
+                key={inv.id}
+                className="flex items-center justify-between rounded-xl border border-primary/20 bg-primary/5 px-4 py-3"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10">
+                    <Mail className="size-4 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">
+                      {inv.inviter.fullName} invited you to{" "}
+                      <span className="font-semibold">{inv.project.name}</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      as {inv.role.charAt(0) + inv.role.slice(1).toLowerCase()}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  nativeButton={false}
+                  size="sm"
+                  render={<Link href={`/invitations/${inv.token}`} />}
+                >
+                  View
+                </Button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Recent Projects */}
       <section className="animate-fade-in-up delay-200 space-y-4">

@@ -34,3 +34,42 @@ export async function sendPasswordResetEmail(to: string, resetUrl: string) {
 
   return data;
 }
+
+export async function sendProjectInvitationEmail(
+  to: string,
+  inviterName: string,
+  projectName: string,
+  role: string,
+  inviteUrl: string,
+) {
+  const { data, error } = await resend.emails.send({
+    from: "ConfigVault <onboarding@resend.dev>",
+    to: [to],
+    subject: `You've been invited to ${projectName} — ConfigVault`,
+    html: `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h2 style="font-size: 20px; font-weight: 700; color: #111; margin: 0 0 8px;">You're invited</h2>
+        <p style="font-size: 14px; color: #555; line-height: 1.6; margin: 0 0 24px;">
+          <strong>${inviterName}</strong> has invited you to join <strong>${projectName}</strong> as a <strong>${role}</strong> on ConfigVault.
+        </p>
+        <a href="${inviteUrl}" style="display: inline-block; background: #111; color: #fff; padding: 12px 28px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none;">
+          View Invitation
+        </a>
+        <p style="font-size: 13px; color: #888; line-height: 1.6; margin: 24px 0 0;">
+          This invitation expires in <strong>7 days</strong>. If you don't have an account yet, you'll be able to create one first.
+        </p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0 16px;" />
+        <p style="font-size: 11px; color: #aaa; margin: 0;">
+          ConfigVault — Secure config management for modern teams
+        </p>
+      </div>
+    `,
+  });
+
+  if (error) {
+    console.error("Failed to send invitation email:", error);
+    throw new Error("Failed to send invitation email");
+  }
+
+  return data;
+}

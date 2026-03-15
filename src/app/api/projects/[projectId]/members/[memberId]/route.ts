@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { getUser } from "@/lib/auth/get-user";
 import { prisma } from "@/lib/db/prisma";
 import { updateMemberSchema } from "@/lib/validations/schemas";
@@ -84,6 +85,8 @@ export async function PATCH(
       },
     });
 
+    revalidateTag("project-members");
+
     return NextResponse.json(updated);
   } catch (error) {
     console.error("Failed to update member:", error);
@@ -140,6 +143,8 @@ export async function DELETE(
       entityId: memberId,
       metadata: { email: targetMember.user.email },
     });
+
+    revalidateTag("project-members");
 
     return NextResponse.json({ message: "Member removed" }, { status: 200 });
   } catch (error) {
