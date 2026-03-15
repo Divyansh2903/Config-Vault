@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { format, formatDistanceToNow, isAfter, subDays } from "date-fns";
+import { format } from "date-fns";
 import {
   FileText,
   RotateCcw,
@@ -89,10 +89,6 @@ const ACTION_OPTIONS = [
 
 function formatTimestamp(dateStr: string) {
   const date = new Date(dateStr);
-  const twoDaysAgo = subDays(new Date(), 2);
-  if (isAfter(date, twoDaysAgo)) {
-    return formatDistanceToNow(date, { addSuffix: true });
-  }
   return format(date, "MMM d, yyyy 'at' h:mm a");
 }
 
@@ -185,6 +181,12 @@ const METADATA_LABELS: Record<string, string> = {
   newRole: "New Role",
 };
 
+function isIsoDateString(value: unknown): value is string {
+  if (typeof value !== "string") return false;
+  const date = new Date(value);
+  return !Number.isNaN(date.getTime()) && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value);
+}
+
 function formatMetadata(metadata: Record<string, unknown> | null) {
   if (!metadata || Object.keys(metadata).length === 0) return null;
 
@@ -194,10 +196,22 @@ function formatMetadata(metadata: Record<string, unknown> | null) {
 
   if (entries.length === 0) return null;
 
-  return entries.map(([key, value]) => ({
-    label: METADATA_LABELS[key] || key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase()),
-    value: typeof value === "object" ? JSON.stringify(value) : String(value),
-  }));
+  return entries.map(([key, value]) => {
+    let displayValue: string;
+    if (value instanceof Date) {
+      displayValue = formatTimestamp(value.toISOString());
+    } else if (isIsoDateString(value)) {
+      displayValue = formatTimestamp(value);
+    } else if (typeof value === "object") {
+      displayValue = JSON.stringify(value);
+    } else {
+      displayValue = String(value);
+    }
+    return {
+      label: METADATA_LABELS[key] || key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase()),
+      value: displayValue,
+    };
+  });
 }
 
 // ── Component ──

@@ -8,7 +8,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex min-h-svh">
+    <div className="relative flex min-h-svh font-roboto text-sm">
       {/* Decorative side panel — visible on larger screens */}
       <div className="hidden w-[45%] flex-col justify-between bg-linear-to-br from-primary/[0.10] via-primary/[0.05] to-transparent p-10 dark:from-primary/[0.06] dark:via-primary/[0.03] lg:flex">
         <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">

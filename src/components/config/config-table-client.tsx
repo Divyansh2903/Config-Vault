@@ -46,6 +46,7 @@ import { RevealSecretDialog } from "@/components/config/reveal-secret-dialog";
 import { RotateSecretDialog } from "@/components/config/rotate-secret-dialog";
 import { DuplicateEntryDialog } from "@/components/config/duplicate-entry-dialog";
 import { DuplicateKeysDialog } from "@/components/config/duplicate-keys-dialog";
+import { ShareSecretDialog } from "@/components/config/share-secret-dialog";
 
 interface ConfigTableClientProps {
   environmentId: string;
@@ -87,6 +88,10 @@ export function ConfigTableClient({
   } | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [duplicateKeysOpen, setDuplicateKeysOpen] = useState(false);
+  const [shareEntry, setShareEntry] = useState<{
+    id: string;
+    key: string;
+  } | null>(null);
 
   const canEdit = userRole === "OWNER" || userRole === "EDITOR";
 
@@ -395,7 +400,10 @@ export function ConfigTableClient({
                           {entry.isSecret && canShareSecrets && (
                             <DropdownMenuItem
                               onClick={() =>
-                                toast.info("Share link feature coming soon")
+                                setShareEntry({
+                                  id: entry.id,
+                                  key: entry.key,
+                                })
                               }
                             >
                               <Share2 className="size-4" />
@@ -478,6 +486,16 @@ export function ConfigTableClient({
           entryKey={duplicateEntry.key}
           projectId={projectId}
           currentEnvironmentId={environmentId}
+          onSuccess={fetchEntries}
+        />
+      )}
+
+      {shareEntry && (
+        <ShareSecretDialog
+          open={!!shareEntry}
+          onOpenChange={(open) => !open && setShareEntry(null)}
+          entryId={shareEntry.id}
+          entryKey={shareEntry.key}
           onSuccess={fetchEntries}
         />
       )}

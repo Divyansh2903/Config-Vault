@@ -31,10 +31,15 @@ interface ShareSecretDialogProps {
 }
 
 const DURATION_OPTIONS = [
-  { label: "1 hour", value: "1" },
-  { label: "6 hours", value: "6" },
-  { label: "24 hours", value: "24" },
-  { label: "7 days", value: "168" },
+  { label: "1 minute", value: "1m", hours: 1 / 60 },
+  { label: "5 minutes", value: "5m", hours: 5 / 60 },
+  { label: "15 minutes", value: "15m", hours: 15 / 60 },
+  { label: "30 minutes", value: "30m", hours: 30 / 60 },
+  { label: "1 hour", value: "1h", hours: 1 },
+  { label: "6 hours", value: "6h", hours: 6 },
+  { label: "24 hours", value: "24h", hours: 24 },
+  { label: "3 days", value: "3d", hours: 72 },
+  { label: "7 days", value: "7d", hours: 168 },
 ];
 
 const MAX_VIEWS_OPTIONS = [
@@ -59,13 +64,13 @@ export function ShareSecretDialog({
   onSuccess,
 }: ShareSecretDialogProps) {
   const [loading, setLoading] = useState(false);
-  const [expiresInHours, setExpiresInHours] = useState("24");
+  const [duration, setDuration] = useState("24h");
   const [maxViews, setMaxViews] = useState("1");
   const [result, setResult] = useState<ShareResult | null>(null);
   const [copied, setCopied] = useState(false);
 
   function resetState() {
-    setExpiresInHours("24");
+    setDuration("24h");
     setMaxViews("1");
     setResult(null);
     setCopied(false);
@@ -78,7 +83,7 @@ export function ShareSecretDialog({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          expiresInHours: Number(expiresInHours),
+          expiresInHours: DURATION_OPTIONS.find((o) => o.value === duration)?.hours ?? 24,
           maxViews: Number(maxViews),
         }),
       });
@@ -136,7 +141,7 @@ export function ShareSecretDialog({
           <div className="grid gap-4">
             <div className="grid gap-1.5">
               <Label htmlFor="duration">Link Duration</Label>
-              <Select value={expiresInHours} onValueChange={(v) => setExpiresInHours(v ?? "24")}>
+              <Select value={duration} onValueChange={(v) => setDuration(v ?? "24h")}>
                 <SelectTrigger id="duration">
                   <SelectValue />
                 </SelectTrigger>
@@ -200,7 +205,7 @@ export function ShareSecretDialog({
 
             <p className="text-xs text-muted-foreground">
               This link will expire in{" "}
-              {DURATION_OPTIONS.find((o) => o.value === expiresInHours)?.label} and
+              {DURATION_OPTIONS.find((o) => o.value === duration)?.label ?? "24 hours"} and
               can be viewed {maxViews} time{maxViews !== "1" ? "s" : ""}.
             </p>
 

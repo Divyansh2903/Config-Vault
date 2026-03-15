@@ -46,7 +46,7 @@ export const duplicateEntrySchema = z.object({
 });
 
 export const shareLinkSchema = z.object({
-  expiresInHours: z.number().min(1).max(168),
+  expiresInHours: z.number().min(1 / 60).max(168),
   maxViews: z.number().min(1).max(10),
 });
 
@@ -68,6 +68,15 @@ export const importEnvSchema = z.object({
 
 export const loginSchema = z.object({
   email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email"),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Reset token is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
