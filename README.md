@@ -6,11 +6,11 @@ Keep your environment variables safe and synced across your team. Start a projec
 
 ## Demo
 
-[![Watch the demo](https://img.youtube.com/vi/T2mCSG4M2vs/maxresdefault.jpg)](https://www.youtube.com/watch?v=T2mCSG4M2vs)
+[Watch the Demo](https://www.youtube.com/watch?v=T2mCSG4M2vs)
 
 ## What is ConfigVault?
 
-ConfigVault is a full-stack configuration and secrets management platform that lets teams securely store, organize, and share environment variables across projects and environments. Every secret is encrypted at rest with AES-256-GCM. Role-based access control decides who can view, edit, reveal, or share secrets — and every action is tracked in a full audit log.
+ConfigVault is a full-stack configuration and secrets management platform that lets teams securely store, organize, and share environment variables across projects and environments. Every secret is encrypted at rest with AES-256-GCM. Role-based access control decides who can view, edit, reveal, or share secrets, and every action is tracked in a full audit log.
 
 Built as a solo project for the [TestSprite Hackathon](https://www.testsprite.com/hackathon).
 
@@ -20,7 +20,7 @@ Built as a solo project for the [TestSprite Hackathon](https://www.testsprite.co
 - **Environment Support** — Development, Staging, and Production environments created automatically with every project
 - **AES-256-GCM Encryption** — Secrets are encrypted at rest; plain-text values never touch the database
 - **Role-Based Access Control** — Owner, Editor, and Viewer roles with granular permissions for revealing and sharing secrets
-- **Secure Secret Sharing** — Generate time-limited, view-limited share links for individual secrets — recipients don't need an account
+- **Secure Secret Sharing** — Generate time-limited, view-limited share links for individual secrets, recipients don't need an account
 - **Secret Rotation Tracking** — Track when secrets were last rotated so nothing goes stale
 - **Bulk .env Import** — Paste a `.env` file during project creation to bootstrap an environment with config entries in one step
 - **Config Duplication** — Copy entries between environments in one click
@@ -94,8 +94,6 @@ configvault/
 │   └── seed.ts                    # Seed script with sample data
 ├── middleware.ts                   # Route protection & auth redirects
 ├── README.md                      # Project documentation
-├── video.txt                      # Demo video script / app flow
-└── demo.mp4                       # Demo video (optional)
 ```
 
 ## Testing
@@ -139,7 +137,7 @@ The seed script creates sample projects, environments, config entries, audit log
 | Bob Editor     | bob@example.com     | Editor             | Editor           |
 | Charlie Viewer | charlie@example.com | Viewer             | —                |
 
-Register through the app with the same emails, then update Profile IDs to match — or update the UUIDs in `prisma/seed.ts` before seeding.
+Register through the app with the same emails, then update Profile IDs to match, or update the UUIDs in `prisma/seed.ts` before seeding.
 
 ### Environment Variables
 
