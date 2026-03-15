@@ -16,6 +16,7 @@ import {
   ArrowUpDown,
   Settings2,
   Filter,
+  Layers,
 } from "lucide-react";
 import type { SafeConfigEntry } from "@/types";
 import { cn } from "@/lib/utils";
@@ -44,6 +45,7 @@ import { ConfigEntryDialog } from "@/components/config/config-entry-dialog";
 import { RevealSecretDialog } from "@/components/config/reveal-secret-dialog";
 import { RotateSecretDialog } from "@/components/config/rotate-secret-dialog";
 import { DuplicateEntryDialog } from "@/components/config/duplicate-entry-dialog";
+import { DuplicateKeysDialog } from "@/components/config/duplicate-keys-dialog";
 
 interface ConfigTableClientProps {
   environmentId: string;
@@ -84,6 +86,7 @@ export function ConfigTableClient({
     key: string;
   } | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [duplicateKeysOpen, setDuplicateKeysOpen] = useState(false);
 
   const canEdit = userRole === "OWNER" || userRole === "EDITOR";
 
@@ -145,6 +148,7 @@ export function ConfigTableClient({
     toast.success("Key copied to clipboard");
   }
 
+
   if (loading) {
     return <TableSkeleton />;
   }
@@ -185,12 +189,24 @@ export function ConfigTableClient({
               className="pl-8"
             />
           </div>
-          {canEdit && (
-            <Button onClick={() => setCreateOpen(true)} className="shadow-sm shadow-primary/10">
-              <Plus className="size-4" />
-              Add Entry
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {userRole === "OWNER" && (
+              <Button
+                variant="outline"
+                onClick={() => setDuplicateKeysOpen(true)}
+                className="gap-1.5"
+              >
+                <Layers className="size-4" />
+                Find Duplicates
+              </Button>
+            )}
+            {canEdit && (
+              <Button onClick={() => setCreateOpen(true)} className="shadow-sm shadow-primary/10">
+                <Plus className="size-4" />
+                Add Entry
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Filters */}
@@ -448,6 +464,12 @@ export function ConfigTableClient({
         />
       )}
 
+      <DuplicateKeysDialog
+        open={duplicateKeysOpen}
+        onOpenChange={setDuplicateKeysOpen}
+        projectId={projectId}
+      />
+
       {duplicateEntry && (
         <DuplicateEntryDialog
           open={!!duplicateEntry}
@@ -459,6 +481,7 @@ export function ConfigTableClient({
           onSuccess={fetchEntries}
         />
       )}
+
     </>
   );
 }

@@ -117,98 +117,98 @@ export default function LandingPage() {
           {/* Bento grid: 2-col + 1-col layout */}
           <div className="grid gap-4 sm:grid-cols-3 sm:gap-5">
             {/* Feature 1 — spans 2 columns, visually dominant */}
-            <Card className="animate-fade-in-up delay-100 group relative col-span-1 overflow-hidden border-border/60 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 sm:col-span-2 sm:row-span-2">
+            <Card className="animate-fade-in-up delay-100 group relative col-span-1 overflow-hidden border-border/60 border-l-2 border-l-primary/50 transition-all duration-300 hover:-translate-y-1 hover:border-l-primary hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 sm:col-span-2 sm:row-span-2">
               <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/[0.03] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <CardHeader>
-                <div className="mb-3 flex size-11 items-center justify-center rounded-xl bg-primary/8 ring-1 ring-primary/10 transition-colors duration-300 group-hover:bg-primary/12">
-                  <Layers className="size-5 text-primary" />
+                <div className="mb-1">
+                  <Layers className="size-5 text-primary/70 transition-colors duration-300 group-hover:text-primary" />
                 </div>
                 <CardTitle className="font-display text-xl">
                   {features[0].title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-5">
+              <CardContent className="space-y-4">
+
+                  {/* Mini environment visualization */}
+                  <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+                    <div className="mb-3 flex items-center gap-2 text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+                      <GitBranch className="size-3 text-primary/60" />
+                      Environment Overview
+                    </div>
+                    <div className="space-y-2">
+                      {[
+                        {
+                          env: "Development",
+                          tag: "DEV",
+                          keys: 24,
+                          synced: true,
+                          color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+                          bar: "w-full bg-blue-500/20",
+                        },
+                        {
+                          env: "Staging",
+                          tag: "STG",
+                          keys: 22,
+                          synced: true,
+                          color: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+                          bar: "w-[92%] bg-amber-500/20",
+                        },
+                        {
+                          env: "Production",
+                          tag: "PROD",
+                          keys: 20,
+                          synced: false,
+                          color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+                          bar: "w-[83%] bg-emerald-500/20",
+                        },
+                      ].map((row) => (
+                        <div
+                          key={row.tag}
+                          className="flex items-center gap-3 rounded-lg border border-border/40 bg-card/80 px-3 py-2"
+                        >
+                          <span
+                            className={cn(
+                              "rounded-md border px-2 py-0.5 text-[9px] font-bold",
+                              row.color
+                            )}
+                          >
+                            {row.tag}
+                          </span>
+                          <span className="min-w-18 text-[11px] font-medium">
+                            {row.env}
+                          </span>
+                          <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+                            <div
+                              className={cn(
+                                "absolute inset-y-0 left-0 rounded-full",
+                                row.bar
+                              )}
+                            />
+                          </div>
+                          <span className="text-[10px] tabular-nums text-muted-foreground">
+                            {row.keys} keys
+                          </span>
+                          {row.synced ? (
+                            <CheckCircle2 className="size-3 text-emerald-500" />
+                          ) : (
+                            <div className="size-3 rounded-full border-2 border-amber-400" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 <CardDescription className="max-w-md text-sm leading-relaxed">
                   {features[0].description}
                 </CardDescription>
-
-                {/* Mini environment visualization */}
-                <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
-                  <div className="mb-3 flex items-center gap-2 text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
-                    <GitBranch className="size-3 text-primary/60" />
-                    Environment Overview
-                  </div>
-                  <div className="space-y-2">
-                    {[
-                      {
-                        env: "Development",
-                        tag: "DEV",
-                        keys: 24,
-                        synced: true,
-                        color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
-                        bar: "w-full bg-blue-500/20",
-                      },
-                      {
-                        env: "Staging",
-                        tag: "STG",
-                        keys: 22,
-                        synced: true,
-                        color: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-                        bar: "w-[92%] bg-amber-500/20",
-                      },
-                      {
-                        env: "Production",
-                        tag: "PROD",
-                        keys: 20,
-                        synced: false,
-                        color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-                        bar: "w-[83%] bg-emerald-500/20",
-                      },
-                    ].map((row) => (
-                      <div
-                        key={row.tag}
-                        className="flex items-center gap-3 rounded-lg border border-border/40 bg-card/80 px-3 py-2"
-                      >
-                        <span
-                          className={cn(
-                            "rounded-md border px-2 py-0.5 text-[9px] font-bold",
-                            row.color
-                          )}
-                        >
-                          {row.tag}
-                        </span>
-                        <span className="min-w-[72px] text-[11px] font-medium">
-                          {row.env}
-                        </span>
-                        <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
-                          <div
-                            className={cn(
-                              "absolute inset-y-0 left-0 rounded-full",
-                              row.bar
-                            )}
-                          />
-                        </div>
-                        <span className="text-[10px] tabular-nums text-muted-foreground">
-                          {row.keys} keys
-                        </span>
-                        {row.synced ? (
-                          <CheckCircle2 className="size-3 text-emerald-500" />
-                        ) : (
-                          <div className="size-3 rounded-full border-2 border-amber-400" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </CardContent>
             </Card>
 
             {/* Feature 2 */}
-            <Card className="animate-fade-in-up delay-200 group relative overflow-hidden border-border/60 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
+            <Card className="animate-fade-in-up delay-200 group relative overflow-hidden border-border/60 border-l-2 border-l-emerald-500/50 transition-all duration-300 hover:-translate-y-1 hover:border-l-emerald-500 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
               <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/[0.02] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <CardHeader>
-                <div className="mb-3 flex size-11 items-center justify-center rounded-xl bg-primary/8 ring-1 ring-primary/10 transition-colors duration-300 group-hover:bg-primary/12">
-                  <Shield className="size-5 text-primary" />
+                <div className="mb-1">
+                  <Shield className="size-5 text-emerald-500/70 transition-colors duration-300 group-hover:text-emerald-500" />
                 </div>
                 <CardTitle className="font-display text-lg">
                   {features[1].title}
@@ -232,11 +232,11 @@ export default function LandingPage() {
             </Card>
 
             {/* Feature 3 */}
-            <Card className="animate-fade-in-up delay-300 group relative overflow-hidden border-border/60 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
+            <Card className="animate-fade-in-up delay-300 group relative overflow-hidden border-border/60 border-l-2 border-l-blue-500/50 transition-all duration-300 hover:-translate-y-1 hover:border-l-blue-500 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
               <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/[0.02] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <CardHeader>
-                <div className="mb-3 flex size-11 items-center justify-center rounded-xl bg-primary/8 ring-1 ring-primary/10 transition-colors duration-300 group-hover:bg-primary/12">
-                  <ScrollText className="size-5 text-primary" />
+                <div className="mb-1">
+                  <ScrollText className="size-5 text-blue-500/70 transition-colors duration-300 group-hover:text-blue-500" />
                 </div>
                 <CardTitle className="font-display text-lg">
                   {features[2].title}

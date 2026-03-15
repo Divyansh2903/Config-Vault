@@ -36,12 +36,14 @@ interface SmartConfigDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   environmentId: string;
+  existingKeys: string[];
   onImport: (suggestions: Suggestion[]) => void;
 }
 
 export function SmartConfigDialog({
   open,
   onOpenChange,
+  existingKeys,
   onImport,
 }: SmartConfigDialogProps) {
   const [prompt, setPrompt] = useState("");
@@ -70,7 +72,7 @@ export function SmartConfigDialog({
       const res = await fetch("/api/ai/suggest-config", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, existingKeys }),
       });
 
       if (res.status === 503) {
@@ -129,18 +131,18 @@ export function SmartConfigDialog({
             Smart Config Assistant
           </DialogTitle>
           <DialogDescription>
-            Describe your project or paste an error — the AI will suggest
-            relevant environment variables.
+            Describe your project, tech stack, feature, or paste documentation
+            — the AI will suggest the environment variables you need.
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4">
           <div className="grid gap-1.5">
-            <Label htmlFor="ai-prompt">What do you need?</Label>
+            <Label htmlFor="ai-prompt">Describe your project or feature</Label>
             <Textarea
               id="ai-prompt"
-              placeholder="e.g. I need env vars for a Next.js app with Supabase and Stripe"
-              className="min-h-[100px] text-sm"
+              placeholder={"e.g. Next.js app with Supabase auth, Stripe payments, and SendGrid emails\n\nor: Adding Google OAuth and GitHub OAuth to our existing auth system\n\nor: Paste your project README or docs here..."}
+              className="min-h-[120px] text-sm"
               value={prompt}
               onChange={(e) => {
                 setPrompt(e.target.value);

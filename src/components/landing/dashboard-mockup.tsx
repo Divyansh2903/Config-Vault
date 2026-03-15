@@ -97,7 +97,7 @@ export function DashboardMockup() {
         </div>
 
         {/* App body */}
-        <div className="flex min-h-[260px] sm:min-h-[300px]">
+        <div className="flex min-h-90 sm:min-h-110">
           {/* Sidebar */}
           <div className="hidden w-44 shrink-0 border-r border-black/[0.06] bg-[oklch(0.965_0.004_210)] p-3 dark:border-white/[0.06] dark:bg-[oklch(0.135_0.012_225)] sm:block">
             <div className="mb-4 flex items-center gap-2">
